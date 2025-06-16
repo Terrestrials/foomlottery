@@ -167,6 +167,8 @@ async function readLogs(provider,lottery,generator,walletAddress) {
         console.log("Bet in:", log.args);
         const [betIndex,betBlockNumber] = tree.readLastBet();
         const newBetIndex = log.args.index;
+        const power = (parseInt(log.args.newHash.toHexString().slice(-2),16) & 0x1f)-1;
+        process.env.POWER = power; // remember power for logPrayer
         if(newBetIndex.gt(betIndex+1)) {
           tree.writeLastLog(betBlockNumber,-1);
           console.log("Bet missing:", betIndex + 1, newBetIndex.toString());
@@ -218,7 +220,7 @@ async function readLogs(provider,lottery,generator,walletAddress) {
         console.log("Prayer:", log.args);
         // convert prayer = array of bytes32 values to string and trim 00 suffix
         const prayer = log.args.prayer.map(p => ethers.utils.toUtf8String(p).replace(/\0*$/, '')).join("");
-        tree.writePrayer(log.args.betId,prayer);
+        tree.writePrayer(log.args.betId,process.env.POWER||0,log.blockNumber,prayer);
       }
       else {
         console.log("Log:", log);

@@ -233,14 +233,14 @@ function readRevealLock(){
   return parseInt(lines[0],10);
 }
 
-function writePrayer(betId,prayer){
+function writePrayer(betId,power,blockNumber,prayer){
   // escape prayer for csv content
   const escapedPrayer = prayer
     .replace(/"/g, '""') // escape quotes by doubling them
     .replace(/\n/g, '\\n') // escape newlines
     .replace(/\r/g, '\\r'); // escape carriage returns
   // always wrap in quotes since we need to handle commas and newlines
-  writeFileSync("www/prayers.csv", sprintfjs.sprintf("%d,\"%s\"\n",betId,escapedPrayer), { flag: 'a' });
+  writeFileSync("www/prayers.csv", sprintfjs.sprintf("%d,%d,%d,\"%s\"\n",betId,power,blockNumber,escapedPrayer), { flag: 'a' });
 }
 
 function writeWaiting(index,hash,blocknumber){
