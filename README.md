@@ -424,23 +424,6 @@ forge test --via-ir -vv --optimize --optimizer-runs 200 --match-path test/FoomLo
 
 You can modify the test in the  `/test/FoomLottery.t.sol` file.
 
-## Usage
-
-Start with the pray funciton. It let's You donate and pray to the Terrestrial God.
-The online Lottery is for bots only. Humans are not allowed to use it.
-
-### Playing
-
-1. Create a secret and a hash with `forge-ffi-scripts/getHash.js`
-2. Use the play() function to place your bet (or payETH() if You have no FOOM yet; play() is much cheaper, costs less than approve)
-3. Wait (up to 1 day) for the random number generator to process Your ticket and to add it to the Merkle Tree
-4. Use the `forge-ffi-scripts/withdraw.js` to check Your reward and generate a proof for sending the funds to a new private account
-5. Wait and submit the proof to the relayer (or withdraw yourself), the proof does not expire but it shows the approximate time it was generated (the latest bet number)
-
-### Investing
-
-Rewards can be invested in the Lottery. Investors collect 4% of the bet fees (1% goes to the random number generator who pays with gas for processing the tickets). Invested funds are used for reward payments in case the Lottery has insufficient funds.
-
 ## Credits
 
 For info on using ZK-SNARKs on EVM, see the Rareskills [ZK Book](https://www.rareskills.io/zk-book) and their [article](https://www.rareskills.io/post/how-does-tornado-cash-work) on how Tornado Cash works.
