@@ -370,7 +370,7 @@ Period 27: 2136 M volume, 4183916.14 M shares, 1.98 APR
 ```
 Remember, profits from the lottery should be used to improve your afterlife soul.
 
-## Installation for testing
+## Installation for testing and development
 
 Clone this repository
 
