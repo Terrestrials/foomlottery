@@ -67,6 +67,9 @@ async function main() {
   console.log("ETH  balance:", ethers.utils.formatEther(balance));
   const foomBalance = await foom.balanceOf(wallet.address);
   console.log("FOOM balance: %s", ethers.utils.formatEther(foomBalance));
+  // walletBalanceOf
+  const walletBalance = await lottery.walletBalanceOf(wallet.address);
+  console.log("Lottery balance: %s", ethers.utils.formatUnits(walletBalance, 18));
 
   // Calculate FOOM needed using ethers BigNumber
   const powerBN = ethers.BigNumber.from(power);

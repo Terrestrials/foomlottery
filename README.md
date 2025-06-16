@@ -5,7 +5,28 @@ In [Terrestrial God](https://terrestrial.church/) we trust !
 This is the public repository of the Foom Lottery. The lottery is based on ZK-SNARK circuits for improved gas essifiency and increased privacy.
 The lottery uses the [Foundry](https://book.getfoundry.sh/) framework for testing. It uses the latest versions of Circom ([circomlib](https://github.com/iden3/circomlib) and [circomlibjs](https://github.com/iden3/circomlibjs)) and [snarkJS](https://github.com/iden3/snarkjs) and [rapidsnark](https://github.com/iden3/rapidsnark) binaries to generate proofs.
 
-## Installation
+## Installation for playing
+
+Clone this repository
+
+```
+git clone https://github.com/terrestrials/foomlottery.git && cd foomlottery
+```
+Install node modules
+```
+yarn
+```
+Copy .env.example to .env and add private key (export from meta mask for example)
+```
+cp .env.example .env && cat .env
+```
+> PRIVATE_KEY="0x YOUR KEY HERE "
+> CHAIN="BASE"
+> CACHE="cache"
+
+
+
+## Installation for testing
 
 Clone this repository
 
