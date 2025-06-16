@@ -248,8 +248,45 @@ No luck :-(
 ```
 Now reward.js mask the required positions for the first reward but the remaining position got a '1' instead of '0'. Let's try again:
 ```
-secret: 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39309,7806
+0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39309,7806 0_________ 0110000111011110 1010000111000110011011 1024000000.0
 ```
+yes !!! and again:
+```
+0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39309,7808 0_________ 0101001110100001 0101010110101001011001 1024000000.0
+```
+Won again !!! Cool. We have now made a profit :-). We have now 2 rewards to collect. Remember not to show the secrets to anybody !
+
+### collect rewards.
+
+Let's try collecting the first ticket and send it to new fresh address 0x1A91e11A45B51d749beC7774075f3824b4948640.
+You can either chenge the private key in the .env file or provide the new address as third parameter to collect.js
+```
+./bin/collect.js 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39309,7806 0 0x1A91e11A45B51d749beC7774075f3824b4948640
+```
+YES, collect through a relayer later and 2 times NO because we do not want to collect now:
+```
+recipient_address: 0x1A91e11A45B51d749beC7774075f3824b4948640
+relayer_address  : 0x67b184FE307c7d0dBE5310BF9A997d26F34911f2
+fee_in_FOOM: 10000000.0
+refund_in_ETH: 0.001
+invest_in_FOOM: 0.0
+Reward_in_FOOM: 1024000000.0 
+GAS price: 0.002855974
+Do You want to calculate the receipt for collecting the reward? (y/n): y
+Do You want to collect the reward later at address 0x1A91e11A45B51d749beC7774075f3824b4948640 through a relayer at address 0x67b184FE307c7d0dBE5310BF9A997d26F34911f2 and invest 0.0 FOOM in the lottery? (y/n): y
+Creating proof...
+Do You want to collect the reward now at address 0x1A91e11A45B51d749beC7774075f3824b4948640 through a relayer at address 0x67b184FE307c7d0dBE5310BF9A997d26F34911f2 and invest 0.0 FOOM in the lottery? (y/n): n
+Do You want to collect the reward now yourself at address 0x1A91e11A45B51d749beC7774075f3824b4948640 and invest 0.0 FOOM in the lottery? (y/n): n
+Use this receipt for collecting later!
+
+0x07ff723ac95375e921de9ce77a1c9f0bf8036275ba41cefe229d36b9ad783a61168d27301977a58619ecbaaf7eb14999d17e48a624a001ff3824faa047edf56819a54b62cab05a742183b7b2b1beed4038f0cfa9f47d27fa20c34767ccc091ef294562ac3ea46bcd058fec56c5bbeb083f5a4cb15ac15072ef785b03247f73ad2838f3e928ee5d1eafcf41ab020559b584527fd9c1cc04a916baf6cb052e621d14339e33ff8ed5cfcf401664e4b6e7f388b5f098d052ee92db50cd8a419bcbbd0855e56740cebdeb8e22f64c352e95509210d855f39468b3bd6c98c79d50430901a5858b9d2f97c38a23be39dccb11110a06f752e1e8d8fff7605d535be1ff2f24d3b5193132b49a9fabb1263a155a46aeb5be0b2de743fdd179f2c3d59fe9831d58aa41ad08cc03483c4934558b8a1a25c935aee5d6e6be314e79810ae3658b0000000000000000000000001a91e11a45b51d749bec7774075f3824b494864000000000000000000000000067b184fe307c7d0dbe5310bf9a997d26f34911f2000000000000000000000000000000000000000000084595161401484a00000000000000000000000000000000000000000000000000000000038d7ea4c680000000000000000000000000000000000000000000000000000000000000000001
+```
+This receipt can be used to send the reward to address 0x1A91e11A45B51d749beC7774075f3824b4948640 and pay a fee to the relayer 0x67b184FE307c7d0dBE5310BF9A997d26F34911f2. The relayer will send the FOOM reward and some ETH (0.001) so that You can start using the new account. Now to be more private You can go to another computer and collect the reqrd using this receipt.
+```
+./bin/collect_receipt.js 0 0x07ff723ac95375e921de9ce77a1c9f0bf8036275ba41cefe229d36b9ad783a61168d27301977a58619ecbaaf7eb14999d17e48a624a001ff3824faa047edf56819a54b62cab05a742183b7b2b1beed4038f0cfa9f47d27fa20c34767ccc091ef294562ac3ea46bcd058fec56c5bbeb083f5a4cb15ac15072ef785b03247f73ad2838f3e928ee5d1eafcf41ab020559b584527fd9c1cc04a916baf6cb052e621d14339e33ff8ed5cfcf401664e4b6e7f388b5f098d052ee92db50cd8a419bcbbd0855e56740cebdeb8e22f64c352e95509210d855f39468b3bd6c98c79d50430901a5858b9d2f97c38a23be39dccb11110a06f752e1e8d8fff7605d535be1ff2f24d3b5193132b49a9fabb1263a155a46aeb5be0b2de743fdd179f2c3d59fe9831d58aa41ad08cc03483c4934558b8a1a25c935aee5d6e6be314e79810ae3658b0000000000000000000000001a91e11a45b51d749bec7774075f3824b494864000000000000000000000000067b184fe307c7d0dbe5310bf9a997d26f34911f2000000000000000000000000000000000000000000084595161401484a00000000000000000000000000000000000000000000000000000000038d7ea4c680000000000000000000000000000000000000000000000000000000000000000001
+```
+
+
 
 
 
