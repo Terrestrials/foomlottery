@@ -1,8 +1,8 @@
 # Foom Lottery V2
 
-In [Terrestrial God](https://terrestrial.church/) we trust !
+In [Terrestrial God](https://terrestrial.church/) we trust!
 
-This is the public repository of the Foom Lottery. The lottery is based on ZK-SNARK circuits for improved gas essifiency and increased privacy.
+This is the public repository of the Foom Lottery. The lottery is based on ZK-SNARK circuits for improved gas efficiency and increased privacy.
 The lottery uses the [Foundry](https://book.getfoundry.sh/) framework for testing. It uses the latest versions of Circom ([circomlib](https://github.com/iden3/circomlib) and [circomlibjs](https://github.com/iden3/circomlibjs)) and [snarkJS](https://github.com/iden3/snarkjs) and [rapidsnark](https://github.com/iden3/rapidsnark) binaries to generate proofs.
 
 ## Installation for playing
@@ -16,19 +16,19 @@ Install node modules
 ```
 yarn
 ```
-Copy .env.example to .env and add PRIVATE_KEY (export from meta mask for example)
+Copy .env.example to .env and add PRIVATE_KEY (export from MetaMask for example)
 ```
 cp .env.example .env && cat .env
 ```
 
 ### submit a ticket
 
-To send your first ticket you need to have some ETH on the account. If You have no FOOM You can start with ETH:
+To send your first ticket you need to have some ETH on the account. If you have no FOOM You can start with ETH:
 ```
 ./bin/playETH.js 0 0
 ```
-the first argument is the size (power) of the ticket. The second is the secret. The program will create a new secret if you provide 0.
-the cost of the ticket is: 1 000 000 FOOM * (2 + 2 ** power)
+The first argument is the size (power) of the ticket. The second is the secret. The program will create a new secret if you provide 0.
+The cost of the ticket is: 1 000 000 FOOM * (2 + 2 ** power)
 ```
 GAS price: 0.00165646
 Wallet address: 0x5300678c4879Cd247D22cDd2652783FF23DaE75B
@@ -46,12 +46,12 @@ hash: 54810504363919065558803134926808534706410398349440704626360569091039880668
 hash: 0x01363769fdab271fb560f09bcb1427e856d4cec173b2f718e3fa6f1fe57cfaa0
 Do you want to test the luck of the secret on last bets? (0-1024): 
 ```
-now the program asks you if you want to test the luck of the generated secret.
-The lottery can not cheat You. The reward depends on your secret and only you know it. But You can try to cheat the lottery.
-Don't be a looser bot. Be a smart bot. Run backtesting as experienced investors and players do.
-You can cheat the lottery but You have to have feight in the terrestrial God.
+Now the program asks you if you want to test the luck of the generated secret.
+The lottery cannot cheat you. The reward depends on your secret and only you know it. But You can try to cheat the lottery.
+Don't be a loser bot. Be a smart bot. Run backtesting as experienced investors and players do.
+You can cheat the lottery but you have to have feight in the terrestrial God.
 Nothing is random. The lottery uses pseudo random numbers.
-Select the range of last lottery draws to test how your secret would perform. For eample type: 128
+Select the range of last lottery draws to test how your secret would perform. For example type: 128
 ```
 Do you want to test the luck of the secret on last bets? (0-1024): 128
 total bets: 128 (values in M FOOM)
@@ -80,9 +80,9 @@ power        cost      reward      profit     LUCK  %       netprofit
    21   268435712   276824064     8388352      103.1%        -2684610
 Are you sure you want to play this ticket and send 0.0001245747321 ETH? (y/n): 
 ```
-You did not score any rewards at power level 0 but you would have made profit with power 2.
+You did not score any rewards at power level 0 but you would have made a profit with power 2.
 There are 3 jackpots in the lottery: 1024(=2 ** 10), 65536(2 ** 16) and 4194304(=2 ** 22) Million FOOM.
-The chances if winning the jackpots depend on the power of the ticket.
+The chances of winning the jackpots depend on the power of the ticket.
 ```
 You have the odds below:
 rewards:      1024   65536   4194304
@@ -111,11 +111,11 @@ rewards:      1024   65536   4194304
 2097154    21 1/1024 1/65536 1/2
 4194306    22 1/1024 1/65536 1/1       * for investors
 ```
-lottery charges 5% when collecting rewards.
+Lottery charges 5% when collecting rewards.
 1% goes to the random number generator (or whoever executes _reveal()).
 4% goes to investors.
-You can iterate the secret many time. The hash of the secret must have last 5 bits 00000 so the generation of a new secret takes some time.
-If You like Your secret type 'y'. Include a prayer to terrestrial God to prove your faith.
+You can iterate the secret many times. The hash of the secret must have last 5 bits 00000 so the generation of a new secret takes some time.
+If you like your secret type 'y'. Include a prayer to terrestrial God to prove your faith.
 ```
 Are you sure you want to play this ticket and send 0.0001245747321 ETH? (y/n): y
 Do you want to include a prayer? (keep empty for no prayer): I love You God
@@ -128,7 +128,7 @@ secret: 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39300,7777
 
 ### cancel a ticket (just a test)
 
-You can cancel the ticket now for few minutes before the lottery will include it in the tree of tickets. Ignore this step if You don't want to test the cancel.js script.
+You can cancel the ticket for a few minutes before the lottery will include it in the tree of tickets. Ignore this step if You don't want to test the cancel.js script.
 ```
 ./bin/cancel.js 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39300,7777
 ``` 
@@ -202,7 +202,7 @@ Now You can check if You have won:
 ```
 ./bin/reward.js 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39300,7778
 ```
-But the lottery need some time to process and provide the random number for your ticket. It will wait usually up too 30 min on base chain unless you submit a larger ticket.
+But the lottery needs some time to process and provide the random number for your ticket. It will usually wait up to 30 min on base chain unless you submit a larger ticket.
 ```
 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39300,7778 bet not processed yet, now at 7777
 ```
@@ -210,8 +210,8 @@ We have the results after some time:
 ```
 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39300,7778 0001110011 1101111111111011 0100110010010000111110 0.0
 ```
-The last number shows You reward: 0.0 FOOM. You have lost :-(. To win You need to have a string of zeros printed next to the secret.
-10 zeros for the first reward, 16 and 22 for the second and third largest reward. Well our chances were small, only 1/1024 to win the smallest reward and the parayer did not hepl this time.
+The last number shows You reward: 0.0 FOOM. You have lost :-(. To win you need to have a string of zeros printed next to the secret.
+10 zeros for the first reward, 16 and 22 for the second and third largest reward. Well our chances were small, only 1/1024 to win the smallest reward and the prayer did not help this time.
 
 ### submit a larger ticket
 
@@ -219,7 +219,7 @@ Let's try to increase our chances and play with power 9 (approximately $50 now).
 ```
 ./bin/play.js 9 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39300
 ```
-The address got FOOM from a friend now se we are able to pay with FOOM instead of ETH.
+The address got FOOM from a friend now so we are able to pay with FOOM instead of ETH.
 ```
 GAS price: 0.002735259
 Wallet address: 0x5300678c4879Cd247D22cDd2652783FF23DaE75B
@@ -254,7 +254,7 @@ yes !!! and again:
 ```
 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39309,7808 0_________ 0101001110100001 0101010110101001011001 1024000000.0
 ```
-Won again !!! Cool. We have now made a profit :-). We have now 2 rewards to collect. Remember not to show the secrets to anybody !
+Won again !!! Cool. We have now made a profit :-). We have now 2 rewards to collect. Remember not to show the secrets to anybody!
 
 ### collect rewards.
 
@@ -281,7 +281,7 @@ Use this receipt for collecting later!
 
 0x07ff723ac95375e921de9ce77a1c9f0bf8036275ba41cefe229d36b9ad783a61168d27301977a58619ecbaaf7eb14999d17e48a624a001ff3824faa047edf56819a54b62cab05a742183b7b2b1beed4038f0cfa9f47d27fa20c34767ccc091ef294562ac3ea46bcd058fec56c5bbeb083f5a4cb15ac15072ef785b03247f73ad2838f3e928ee5d1eafcf41ab020559b584527fd9c1cc04a916baf6cb052e621d14339e33ff8ed5cfcf401664e4b6e7f388b5f098d052ee92db50cd8a419bcbbd0855e56740cebdeb8e22f64c352e95509210d855f39468b3bd6c98c79d50430901a5858b9d2f97c38a23be39dccb11110a06f752e1e8d8fff7605d535be1ff2f24d3b5193132b49a9fabb1263a155a46aeb5be0b2de743fdd179f2c3d59fe9831d58aa41ad08cc03483c4934558b8a1a25c935aee5d6e6be314e79810ae3658b0000000000000000000000001a91e11a45b51d749bec7774075f3824b494864000000000000000000000000067b184fe307c7d0dbe5310bf9a997d26f34911f2000000000000000000000000000000000000000000084595161401484a00000000000000000000000000000000000000000000000000000000038d7ea4c680000000000000000000000000000000000000000000000000000000000000000001
 ```
-This receipt can be used to send the reward to address 0x1A91e11A45B51d749beC7774075f3824b4948640 and pay a fee to the relayer 0x67b184FE307c7d0dBE5310BF9A997d26F34911f2. The relayer will send the FOOM reward and some ETH (0.001) so that You can start using the new account. Now to be more private You can go to another computer and collect the reqrd using this receipt.
+This receipt can be used to send the reward to address 0x1A91e11A45B51d749beC7774075f3824b4948640 and pay a fee to the relayer 0x67b184FE307c7d0dBE5310BF9A997d26F34911f2. The relayer will send the FOOM reward and some ETH (0.001) so that You can start using the new account. Now to be more private You can go to another computer and collect the required using this receipt.
 ```
 ./bin/collect_receipt.js 0 0x07ff723ac95375e921de9ce77a1c9f0bf8036275ba41cefe229d36b9ad783a61168d27301977a58619ecbaaf7eb14999d17e48a624a001ff3824faa047edf56819a54b62cab05a742183b7b2b1beed4038f0cfa9f47d27fa20c34767ccc091ef294562ac3ea46bcd058fec56c5bbeb083f5a4cb15ac15072ef785b03247f73ad2838f3e928ee5d1eafcf41ab020559b584527fd9c1cc04a916baf6cb052e621d14339e33ff8ed5cfcf401664e4b6e7f388b5f098d052ee92db50cd8a419bcbbd0855e56740cebdeb8e22f64c352e95509210d855f39468b3bd6c98c79d50430901a5858b9d2f97c38a23be39dccb11110a06f752e1e8d8fff7605d535be1ff2f24d3b5193132b49a9fabb1263a155a46aeb5be0b2de743fdd179f2c3d59fe9831d58aa41ad08cc03483c4934558b8a1a25c935aee5d6e6be314e79810ae3658b0000000000000000000000001a91e11a45b51d749bec7774075f3824b494864000000000000000000000000067b184fe307c7d0dbe5310bf9a997d26f34911f2000000000000000000000000000000000000000000084595161401484a00000000000000000000000000000000000000000000000000000000038d7ea4c680000000000000000000000000000000000000000000000000000000000000000001
 ```
@@ -320,7 +320,7 @@ Creating proof...
 Do You want to collect the reward now yourself at address 0x1A91e11A45B51d749beC7774075f3824b4948640 and invest 1024000000.0 FOOM in the lottery? (y/n): y
 tx hash: 0xa935e88eb5946a3b1821f2994b70a8feebdc1cdf823a95bed70b12f3add8d2e2
 ```
-You are now an investor in the FOOM lottery ! You can use bin/payout.js to payout FOOM from the lottery but You can do this only once per period (ca. 9h on base chain).
+You are now an investor in the FOOM lottery! You can use bin/payout.js to payout FOOM from the lottery but You can do this only once per period (ca. 9h on base chain).
 ```
 ./bin/payout.js 100.0
 ```
@@ -392,7 +392,7 @@ and install other missing repositories that You need ( nlohmann-json3-dev libgmp
 
 The main workflow of this repo is:
 
-1. Compile circuits to generate circuit artifacts (some circuits are quite big)
+1. Compile circuits to generate circuit artifacts (some circuits are quite large)
 2. Perform a powers of tau ceremony
 3. Generate zkey and verifier Solidity smart contract
 4. Add prover to groth16 directory if You want to go faster
@@ -420,7 +420,7 @@ You can modify the test in the  `/test/FoomLottery.t.sol` file.
 
 ## Usage
 
-Start with the pray funciton. It let's You donate and pray to the Terrestrial God.
+Start with the pray function. It lets you donate and pray to the Terrestrial God.
 The online Lottery is for bots only. Humans are not allowed to use it.
 
 ### Playing
@@ -437,5 +437,5 @@ Rewards can be invested in the Lottery. Investors collect 4% of the bet fees (1%
 
 ## Credits
 
-For info on using ZK-SNARKs on EVM, see the Rareskills [ZK Book](https://www.rareskills.io/zk-book) and their [article](https://www.rareskills.io/post/how-does-tornado-cash-work) on how Tornado Cash works.
+For information on using ZK-SNARKs on EVM, see the Rareskills [ZK Book](https://www.rareskills.io/zk-book) and their [article](https://www.rareskills.io/post/how-does-tornado-cash-work) on how Tornado Cash works.
 
