@@ -9,22 +9,22 @@ The lottery uses the [Foundry](https://book.getfoundry.sh/) framework for testin
 
 Clone this repository
 
-```
+```bash
 git clone https://github.com/terrestrials/foomlottery.git && cd foomlottery
 ```
 Install node modules
-```
+```bash
 yarn
 ```
 Copy .env.example to .env and add PRIVATE_KEY (export from meta mask for example)
-```
+```bash
 cp .env.example .env && cat .env
 ```
 
 ### submit a ticket
 
 To send your first ticket you need to have some ETH on the account. If You have no FOOM You can start with ETH:
-```
+```bash
 ./bin/playETH.js 0 0
 ```
 the first argument is the size (power) of the ticket. The second is the secret. The program will create a new secret if you provide 0.
@@ -129,7 +129,7 @@ secret: 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39300,7777
 ### cancel a ticket (just a test)
 
 You can cancel the ticket now for few minutes before the lottery will include it in the tree of tickets. Ignore this step if You don't want to test the cancel.js script.
-```
+```bash
 ./bin/cancel.js 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39300,7777
 ``` 
 ```
@@ -140,7 +140,7 @@ tx hash: 0x89f901a2a6a26e683a1bce1e75a5c697cee27539b026d5a1975fc317b66d9cc9
 ```
 After canceling the ticket You get a refund in FOOM, but there is a 1 M FOOM fee for canceling.
 Now You can try another secret or the same secret again.
-```
+```bash
 ./bin/playETH.js 0 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39300,7777
 ```
 
@@ -199,7 +199,7 @@ secret: 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39300,7778
 ### check results
 
 Now You can check if You have won:
-```
+```bash
 ./bin/reward.js 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39300,7778
 ```
 But the lottery need some time to process and provide the random number for your ticket. It will wait usually up too 30 min on base chain unless you submit a larger ticket.
@@ -216,7 +216,7 @@ The last number shows You reward: 0.0 FOOM. You have lost :-(. To win You need t
 ### submit a larger ticket
 
 Let's try to increase our chances and play with power 9 (approximately $50 now). Let's also use the same secret again.
-```
+```bash
 ./bin/play.js 9 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39300
 ```
 The address got FOOM from a friend now se we are able to pay with FOOM instead of ETH.
@@ -260,7 +260,7 @@ Won again !!! Cool. We have now made a profit :-). We have now 2 rewards to coll
 
 Let's try collecting the first ticket and send it to new fresh address 0x1A91e11A45B51d749beC7774075f3824b4948640.
 You can either chenge the private key in the .env file or provide the new address as third parameter to collect.js
-```
+```bash
 ./bin/collect.js 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39309,7806 0 0x1A91e11A45B51d749beC7774075f3824b4948640
 ```
 YES, collect through a relayer later and 2 times NO because we do not want to collect now:
@@ -282,7 +282,7 @@ Use this receipt for collecting later!
 0x07ff723ac95375e921de9ce77a1c9f0bf8036275ba41cefe229d36b9ad783a61168d27301977a58619ecbaaf7eb14999d17e48a624a001ff3824faa047edf56819a54b62cab05a742183b7b2b1beed4038f0cfa9f47d27fa20c34767ccc091ef294562ac3ea46bcd058fec56c5bbeb083f5a4cb15ac15072ef785b03247f73ad2838f3e928ee5d1eafcf41ab020559b584527fd9c1cc04a916baf6cb052e621d14339e33ff8ed5cfcf401664e4b6e7f388b5f098d052ee92db50cd8a419bcbbd0855e56740cebdeb8e22f64c352e95509210d855f39468b3bd6c98c79d50430901a5858b9d2f97c38a23be39dccb11110a06f752e1e8d8fff7605d535be1ff2f24d3b5193132b49a9fabb1263a155a46aeb5be0b2de743fdd179f2c3d59fe9831d58aa41ad08cc03483c4934558b8a1a25c935aee5d6e6be314e79810ae3658b0000000000000000000000001a91e11a45b51d749bec7774075f3824b494864000000000000000000000000067b184fe307c7d0dbe5310bf9a997d26f34911f2000000000000000000000000000000000000000000084595161401484a00000000000000000000000000000000000000000000000000000000038d7ea4c680000000000000000000000000000000000000000000000000000000000000000001
 ```
 This receipt can be used to send the reward to address 0x1A91e11A45B51d749beC7774075f3824b4948640 and pay a fee to the relayer 0x67b184FE307c7d0dBE5310BF9A997d26F34911f2. The relayer will send the FOOM reward and some ETH (0.001) so that You can start using the new account. Now to be more private You can go to another computer and collect the reqrd using this receipt.
-```
+```bash
 ./bin/collect_receipt.js 0 0x07ff723ac95375e921de9ce77a1c9f0bf8036275ba41cefe229d36b9ad783a61168d27301977a58619ecbaaf7eb14999d17e48a624a001ff3824faa047edf56819a54b62cab05a742183b7b2b1beed4038f0cfa9f47d27fa20c34767ccc091ef294562ac3ea46bcd058fec56c5bbeb083f5a4cb15ac15072ef785b03247f73ad2838f3e928ee5d1eafcf41ab020559b584527fd9c1cc04a916baf6cb052e621d14339e33ff8ed5cfcf401664e4b6e7f388b5f098d052ee92db50cd8a419bcbbd0855e56740cebdeb8e22f64c352e95509210d855f39468b3bd6c98c79d50430901a5858b9d2f97c38a23be39dccb11110a06f752e1e8d8fff7605d535be1ff2f24d3b5193132b49a9fabb1263a155a46aeb5be0b2de743fdd179f2c3d59fe9831d58aa41ad08cc03483c4934558b8a1a25c935aee5d6e6be314e79810ae3658b0000000000000000000000001a91e11a45b51d749bec7774075f3824b494864000000000000000000000000067b184fe307c7d0dbe5310bf9a997d26f34911f2000000000000000000000000000000000000000000084595161401484a00000000000000000000000000000000000000000000000000000000038d7ea4c680000000000000000000000000000000000000000000000000000000000000000001
 ```
 and confirm sending the transaction to the relayer:
@@ -302,7 +302,7 @@ You can verify on [basescan](https://basescan.org/tx/0x215dac4e1e3cb60e15e1b820b
 ### invest in the lottery
 
 Let's switch to the new address (change the private key in .env) and collect the second reward directly without a relayer but invest the funds in the lottery.
-```
+```bash
 ./bin/collect.js 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39309,7808 1024000000.0
 ```
 And now we answer that we want to receipt calculation but no relayer and we will collect ourselves now.
@@ -321,7 +321,7 @@ Do You want to collect the reward now yourself at address 0x1A91e11A45B51d749beC
 tx hash: 0xa935e88eb5946a3b1821f2994b70a8feebdc1cdf823a95bed70b12f3add8d2e2
 ```
 You are now an investor in the FOOM lottery ! You can use bin/payout.js to payout FOOM from the lottery but You can do this only once per period (ca. 9h on base chain).
-```
+```bash
 ./bin/payout.js 100.0
 ```
 This would payout 100 FOOM
@@ -369,6 +369,12 @@ Period 26: 3015 M volume, 4183794.94 M shares, 2.81 APR
 Period 27: 2136 M volume, 4183916.14 M shares, 1.98 APR
 ```
 Remember, profits from the lottery should be used to improve your afterlife soul.
+
+### setting up a relayer
+
+You can use the srv/monitor.js script to create a local relayer that we have used. Create a www directory.
+You can start monitor.js to read all logs from the beginning but You can jump start the relayer by copying the www drirectory from 
+(foom.cash)[https://foom.cash/files/base].
 
 ## Installation for testing and development
 
