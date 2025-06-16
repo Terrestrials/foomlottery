@@ -217,7 +217,7 @@ async function readLogs(provider,lottery,generator,walletAddress) {
       else if(log.event == "LogPrayer") {
         console.log("Prayer:", log.args);
         // convert prayer = array of bytes32 values to string and trim 00 suffix
-        const prayer = log.args.prayer.map(p => ethers.utils.toUtf8String(p).replace(/\0*$/, '')).join("\n");
+        const prayer = log.args.prayer.map(p => ethers.utils.toUtf8String(p).replace(/\0*$/, '')).join("");
         tree.writePrayer(log.args.betId,prayer);
       }
       else {
