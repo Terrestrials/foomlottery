@@ -81,6 +81,15 @@ function getLines(path) {
   return textold.split("\n").filter((line) => line.trim() !== "");
 }
 
+function keepLastLines(path,numLines){
+  const lines = getLines(path);
+  if(lines.length<=numLines) {
+    return;
+  }
+  writeFileSync("www/"+path.replace(/\.csv$/,".old.csv"), lines.slice(0,lines.length-numLines).join("\n")+"\n", { flag: 'a' });
+  writeFileSync("www/"+path, lines.slice(lines.length-numLines).join("\n")+"\n", { flag: 'w' });
+}
+
 function writeLast(nextIndex,blockNumber,lastRoot,lastLeaf){
   writeFileSync("www/last.csv", sprintfjs.sprintf("%x,%x,%s,%s\n",nextIndex,blockNumber,no0x(bigintToHex(lastRoot)),no0x(bigintToHex(lastLeaf))));
 }
@@ -685,4 +694,5 @@ module.exports = {
   readLastBet,
   readLastPeriod,
   appendLastPeriod,
+  keepLastLines,
 };

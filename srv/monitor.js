@@ -38,6 +38,8 @@ async function rememberHash(provider,lottery) {
     const Period = await lottery.periods(process.env.LAST_PERIOD);
     tree.appendLastPeriod(process.env.LAST_PERIOD,Period.bets,Period.shares);
     console.log("Saved period: %d, bets: %d, shares: %d", process.env.LAST_PERIOD,ethers.utils.formatUnits(Period.bets, 18),ethers.utils.formatUnits(Period.shares, 18));
+    tree.keepLastLines("prayers.csv",100);
+    tree.keepLastLines("period.csv",10);
   }
 }
 

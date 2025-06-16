@@ -374,7 +374,7 @@ Remember, profits from the lottery should be used to improve your afterlife soul
 
 You can use the srv/monitor.js script to create a local relayer that we have used. Create a www directory.
 You can start monitor.js to read all logs from the beginning but You can jump start the relayer by copying the www drirectory from 
-(foom.cash)[https://foom.cash/files/base].
+(foom.cash)[https://foom.cash/files/base]. Create a www/fees.csv file to inform clients about your fees and relayer address.
 
 ## Installation for testing and development
 
