@@ -51,7 +51,7 @@ async function main() {
   const rewardbits = d[3][6];
 
   console.log("recipient_address:", recipient_address.toHexString());
-  console.log("relayer_address  :", (relayer_address==0n?'0x0000000000000000000000000000000000000000':bigintToHex(relayer_address)));
+  console.log("relayer_address  :", (relayer_address==0?'0x0000000000000000000000000000000000000000':relayer_address.toHexString()));
   console.log("fee_in_FOOM:", ethers.utils.formatUnits(fee_in_FOOM, 18));
   console.log("refund_in_ETH:", ethers.utils.formatEther(refund_in_ETH));
   console.log("invest_in_FOOM:", ethers.utils.formatUnits(invest_in_FOOM, 18));
@@ -85,8 +85,8 @@ async function main() {
         console.log("ERROR: relayer not ready!");
         process.exit(1);
       }
-      if(relayer_address!=0n && relayer_address_official !== ethers.utils.getAddress(bigintToHex(relayer_address))) {
-        console.log("ERROR: relayer address does not match "+relayer_address_official+" != "+ethers.utils.getAddress(bigintToHex(relayer_address)));
+      if(relayer_address!=0 && relayer_address_official != ethers.utils.getAddress(relayer_address.toHexString())) {
+        console.log("ERROR: relayer address does not match "+relayer_address_official+" != "+ethers.utils.getAddress(relayer_address.toHexString()));
         process.exit(1);
       }
       const min_fee_in_FOOM = ethers.utils.parseUnits(min_fee_in_FOOM_tx, 18);
