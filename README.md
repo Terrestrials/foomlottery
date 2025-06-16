@@ -305,7 +305,7 @@ Let's switch to the new address (change the private key in .env) and collect the
 ```
 ./bin/collect.js 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39309,7808 1024000000.0
 ```
-And now we answer that we want to receipt calculation but no relayer and we will collect ourselves now.
+For the prompts, we will answer 'y' to calculate the receipt, 'n' to using a relayer, and 'y' to collecting the reward ourselves.
 ```
 recipient_address: 0x1A91e11A45B51d749beC7774075f3824b4948640
 relayer_address  : 0x67b184FE307c7d0dBE5310BF9A997d26F34911f2
