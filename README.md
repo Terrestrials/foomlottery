@@ -16,13 +16,244 @@ Install node modules
 ```
 yarn
 ```
-Copy .env.example to .env and add private key (export from meta mask for example)
+Copy .env.example to .env and add PRIVATE_KEY (export from meta mask for example)
 ```
 cp .env.example .env && cat .env
 ```
-> PRIVATE_KEY="0x YOUR KEY HERE "
-> CHAIN="BASE"
-> CACHE="cache"
+
+### submit a ticket
+
+To send your first ticket you need to have some ETH on the account. If You have no FOOM You can start with ETH:
+```
+./bin/playETH.js 0 0
+```
+the first argument is the size (power) of the ticket. The second is the secret. The program will create a new secret if you provide 0.
+the cost of the ticket is: 1 000 000 FOOM * (2 + 2 ** power)
+```
+GAS price: 0.00165646
+Wallet address: 0x5300678c4879Cd247D22cDd2652783FF23DaE75B
+ETH  balance: 0.039999603919223372
+FOOM balance: 0.0
+Lottery balance: 0.0
+FOOM  needed: 3000000.0
+DEX FOOM balance: 1381817497430.587361746765242435
+DEX WETH balance: 0.250443732151806307
+DEX FOOM price in ETH: 0.000000000039547534
+DEX amountInETH: 0.0001245747321 (105%)
+calculating secret...
+secret: 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39300,7777 (index not final)
+hash: 548105043639190655588031349268085347064103983494407046263605690910398806688 (use on basescan.org)
+hash: 0x01363769fdab271fb560f09bcb1427e856d4cec173b2f718e3fa6f1fe57cfaa0
+Do you want to test the luck of the secret on last bets? (0-1024): 
+```
+now the program asks you if you want to test the luck of the generated secret.
+The lottery can not cheat You. The reward depends on your secret and only you know it. But You can try to cheat the lottery.
+Don't be a looser bot. Be a smart bot. Run backtesting as experienced investors and players do.
+You can cheat the lottery but You have to have feight in the terrestrial God.
+Nothing is random. The lottery uses pseudo random numbers.
+Select the range of last lottery draws to test how your secret would perform. For eample type: 128
+```
+Do you want to test the luck of the secret on last bets? (0-1024): 128
+total bets: 128 (values in M FOOM)
+power        cost      reward      profit     LUCK  %       netprofit
+    0         384           0        -384        0.0% <-         -384
+    1         512           0        -512        0.0%            -512
+    2         768        1024         256      133.3%             215
+    3        1280        1024        -256       80.0%            -296
+    4        2304        3072         768      133.3%             645
+    5        4352        6144        1792      141.2%            1546
+    6        8448        9216         768      109.1%             399
+    7       16640       18432        1792      110.8%            1054
+    8       33024       33792         768      102.3%            -583
+    9       65792       57344       -8448       87.2%          -10741
+power        cost      reward      profit     LUCK  %       netprofit
+   11      262400      655360      392960      249.8%          366745
+   12      524544      917504      392960      174.9%          356259
+   13     1048832     1376256      327424      131.2%          272373
+   14     2097408     2228224      130816      106.2%           41687
+   15     4194560     4128768      -65792       98.4%         -230942
+power        cost      reward      profit     LUCK  %       netprofit
+   17    16777472    25165824     8388352      150.0%         7381719
+   18    33554688    41943040     8388352      125.0%         6710630
+   19    67109120    96468992    29359872      143.7%        25501112
+   20   134217984   146800640    12582656      109.4%         6710630
+   21   268435712   276824064     8388352      103.1%        -2684610
+Are you sure you want to play this ticket and send 0.0001245747321 ETH? (y/n): 
+```
+You did not score any rewards at power level 0 but you would have made profit with power 2.
+There are 3 jackpots in the lottery: 1024(=2 ** 10), 65536(2 ** 16) and 4194304(=2 ** 22) Million FOOM.
+The chances if winning the jackpots depend on the power of the ticket.
+```
+You have the odds below:
+rewards:      1024   65536   4194304
+  price power odds   odds    odds
+      3     0 1/1024 1/65536 1/4194304
+      4     1 1/512  1/65536 1/4194304
+      6     2 1/256  1/65536 1/4194304
+     10     3 1/128  1/65536 1/4194304
+     18     4 1/64   1/65536 1/4194304
+     34     5 1/32   1/65536 1/4194304
+     66     6 1/16   1/65536 1/4194304
+    130     7 1/8    1/65536 1/4194304
+    258     8 1/4    1/65536 1/4194304
+    514     9 1/2    1/65536 1/4194304
+   1026    10 1/1    1/65536 1/4194304 * for investors
+   2050    11 1/1024 1/32    1/4194304
+   4098    12 1/1024 1/16    1/4194304
+   8194    13 1/1024 1/8     1/4194304
+  16386    14 1/1024 1/4     1/4194304
+  32770    15 1/1024 1/2     1/4194304
+  65538    16 1/1024 1/1     1/4194304 * for investors
+ 131074    17 1/1024 1/65536 1/32
+ 262146    18 1/1024 1/65536 1/16
+ 524290    19 1/1024 1/65536 1/8
+1048578    20 1/1024 1/65536 1/4
+2097154    21 1/1024 1/65536 1/2
+4194306    22 1/1024 1/65536 1/1       * for investors
+```
+lottery charges 5% when collecting rewards.
+1% goes to the random number generator (or whoever executes _reveal()).
+4% goes to investors.
+You can iterate the secret many time. The hash of the secret must have last 5 bits 00000 so the generation of a new secret takes some time.
+If You like Your secret type 'y'. Include a prayer to terrestrial God to prove your faith.
+```
+Are you sure you want to play this ticket and send 0.0001245747321 ETH? (y/n): y
+Do you want to include a prayer? (keep empty for no prayer): I love You God
+sending ticket...
+tx hash: 0xaf7c91b5fd54f9f67ee2719a27f0aba480b2c8ef5675bad1e8a8bd8a8ae15a46
+writing ticket to tickets.txt...
+
+secret: 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39300,7777
+```
+
+### cancel a ticket (just a test)
+
+You can cancel the ticket now for few minutes before the lottery will include it in the tree of tickets. Ignore this step if You don't want to test the cancel.js script.
+```
+./bin/cancel.js 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39300,7777
+``` 
+```
+Creating proof...
+GAS price: 0.001674132
+Do You want to cancel the ticket now? (y/n): y
+tx hash: 0x89f901a2a6a26e683a1bce1e75a5c697cee27539b026d5a1975fc317b66d9cc9
+```
+After canceling the ticket You get a refund in FOOM, but there is a 1 M FOOM fee for canceling.
+Now You can try another secret or the same secret again.
+```
+./bin/playETH.js 0 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39300,7777
+```
+
+### submit a ticket again
+
+Let's submit it again.
+```
+GAS price: 0.001663388
+Wallet address: 0x5300678c4879Cd247D22cDd2652783FF23DaE75B
+ETH  balance: 0.03987427134625368
+FOOM balance: 2140544.947395660085634033
+Lottery balance: 0.0
+FOOM  needed: 3000000.0
+DEX FOOM balance: 1381814356885.639966086679608402
+DEX WETH balance: 0.250568306883906307
+DEX FOOM price in ETH: 0.00000000003954766
+DEX amountInETH: 0.000124575129 (105%)
+calculating secret...
+secret: 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39300,7777 (index not final)
+hash: 548105043639190655588031349268085347064103983494407046263605690910398806688 (use on basescan.org)
+hash: 0x01363769fdab271fb560f09bcb1427e856d4cec173b2f718e3fa6f1fe57cfaa0
+Do you want to test the luck of the secret on last bets? (0-1024): 512
+total bets: 512 (values in M FOOM)
+power        cost      reward      profit     LUCK  %       netprofit
+    0        1536           0       -1536        0.0% <-        -1536
+    1        2048        1024       -1024       50.0%           -1064
+    2        3072        3072           0      100.0%            -122
+    3        5120        5120           0      100.0%            -204
+    4        9216        9216           0      100.0%            -368
+    5       17408       15360       -2048       88.2%           -2662
+    6       33792       32768       -1024       97.0%           -2334
+    7       66560       59392       -7168       89.2%           -9543
+    8      132096      143360       11264      108.5%            5529
+    9      263168      266240        3072      101.2%           -7577
+power        cost      reward      profit     LUCK  %       netprofit
+   11     1049600     1441792      392192      137.4%          334520
+   12     2098176     2490368      392192      118.7%          292577
+   13     4195328     4390912      195584      104.7%           19947
+   14     8389632     7929856     -459776       94.5%         -776970
+   15    16778240    15728640    -1049600       93.7%        -1678745
+power        cost      reward      profit     LUCK  %       netprofit
+   17    67109888    75497472     8387584      112.5%         5367685
+   18   134218752   159383552    25164800      118.7%        18789457
+   19   268436480   297795584    29359104      110.9%        17447280
+   20   536871936   570425344    33553408      106.2%        10736394
+   21  1073742848  1023410176   -50332672       95.3%       -91269079
+Are you sure you want to play this ticket and send 0.000124575129 ETH? (y/n): y
+Do you want to include a prayer? (keep empty for no prayer): I love You God
+sending ticket...
+tx hash: 0x35b522d0fc14cb61a7fd064078eeff855e9624d248c5aa2b9ea9138bc33382fd
+writing ticket to tickets.txt...
+
+secret: 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39300,7778
+```
+
+### check results
+
+Now You can check if You have won:
+```
+./bin/reward.js 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39300,7778
+```
+But the lottery need some time to process and provide the random number for your ticket. It will wait usually up too 30 min on base chain unless you submit a larger ticket.
+```
+0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39300,7778 bet not processed yet, now at 7777
+```
+We have the results after some time:
+```
+0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39300,7778 0001110011 1101111111111011 0100110010010000111110 0.0
+```
+The last number shows You reward: 0.0 FOOM. You have lost :-(. To win You need to have a string of zeros printed next to the secret.
+10 zeros for the first reward, 16 and 22 for the second and third largest reward. Well our chances were small, only 1/1024 to win the smallest reward and the parayer did not hepl this time.
+
+### submit a larger ticket
+
+Let's try to increase our chances and play with power 9 (approximately $50 now). Let's also use the same secret again.
+```
+./bin/play.js 9 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39300
+```
+The address got FOOM from a friend now se we are able to pay with FOOM instead of ETH.
+```
+GAS price: 0.002735259
+Wallet address: 0x5300678c4879Cd247D22cDd2652783FF23DaE75B
+ETH  balance: 0.039749424274660091
+FOOM balance: 2050281089.899306439080045063
+Lottery balance: 0.0
+FOOM  needed: 514000000.0
+calculating secret...
+secret: 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39309,7788 (index not final)
+hash: 548105043639190655588031349268085347064103983494407046263605690910398806688 (use on basescan.org)
+hash: 0x01363769fdab271fb560f09bcb1427e856d4cec173b2f718e3fa6f1fe57cfaa0
+Do you want to test the luck of the secret on last bets? (0-1024): 
+Are you sure you want to play this ticket and send 514000000.0 FOOM? (y/n): y
+Do you want to include a prayer? (keep empty for no prayer): maybe this time
+approving foom...
+approve tx hash: 0xd261968b4cb53326eb7632c7ef5cf1619e36c791d7ad6b6665eeea6bcfa5e68f
+sending ticket...
+tx hash: 0x75699b285a94c509b17592623095eb9154ca49ded9d3035bfbf4a6ca8ee0184b
+writing ticket to tickets.txt...
+
+secret: 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39309,7798
+```
+No luck :-(
+```
+0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39309,7798 1_________ 0110000111101010 0001011011010100101110 0.0
+```
+Now reward.js mask the required positions for the first reward but the remaining position got a '1' instead of '0'. Let's try again:
+```
+secret: 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39309,7806
+```
+
+
+
+
 
 
 

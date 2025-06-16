@@ -264,7 +264,7 @@ function getIndexRand(hashstr,betIndex) {
   const lines = getLines(""+path1+"/"+path2+"/"+path3+".csv");
   for(let i=0;i<lines.length;i++) {
     const [index,skip,hash,myrand] = lines[i].split(',');
-    if(hash===hashstr) {
+    if(hash===hashstr && parseInt(index,16)>=betIndex) {
       const newIndex=(betIndex&0xffffff00) + parseInt(index,16);
       return [newIndex,hexToBigint(myrand)];
     }
