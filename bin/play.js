@@ -63,7 +63,7 @@ async function main() {
   console.log("Wallet address:", wallet.address);
   const balance = await provider.getBalance(wallet.address);
   console.log("ETH  balance:", ethers.utils.formatEther(balance));
-    const foomBalance = await foom.balanceOf(wallet.address);
+  const foomBalance = await foom.balanceOf(wallet.address);
   console.log("FOOM balance: %s", ethers.utils.formatEther(foomBalance));
   // walletBalanceOf
   const walletBalance = await lottery.walletBalanceOf(wallet.address);

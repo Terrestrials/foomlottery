@@ -1,7 +1,7 @@
 #!/usr/bin/node
 const dotenv = require("dotenv");
 const { ethers } = require("ethers");
-const { readLast } = require("./utils/mimcMerkleTree.js");
+const { readLast,getLines } = require("./utils/mimcMerkleTree.js");
 const sprintfjs = require("sprintf-js");
 const chain = require("../forge-ffi-scripts/utils/chain.js");
 
@@ -24,19 +24,23 @@ async function main() {
   const [nextIndex,blockNumber,lastRoot,lastLeaf] = readLast();
   console.log("FOOM Lottery total number of tickets: %d", nextIndex);
 
-  for (let i = 1;; i++) {
-    const period = await lottery.periods(i);
-    const bets = ethers.utils.formatUnits(period.bets.toString(), 18).replace(/\..*$/, "");
-    const shares = ethers.utils.formatUnits(period.shares.toString(), 18).replace(/\..*$/, "");
-    if(period.shares.eq(0)) {
-      break;
-    }
-    if(period.bets.lt(period.shares)) {
-      const apr = (1.0+0.04*bets/shares)**((60*60*24*365)/(16384*2))-1;
-      console.log("Period %s: %s M volume, %s M shares, %s APR", i, bets/1000000, shares/1000000, sprintfjs.sprintf("%.2f", apr*100));
+  const lines = getLines('period.csv');
+  for (let i = 0;i<10; i++) {
+    //const period = await lottery.periods(i);
+    //const bets = ethers.utils.formatUnits(period.bets.toString(), 18).replace(/\..*$/, "");
+    //const shares = ethers.utils.formatUnits(period.shares.toString(), 18).replace(/\..*$/, "");
+    //if(period.shares.eq(0)) {
+    //  break;
+    //}
+    const [period_num,bets_hex,shares_hex] = lines[i].split(',');
+    const bets = parseInt(ethers.utils.formatUnits('0x'+bets_hex, 18).replace(/\..*$/, "")/1000000);
+    const shares = parseInt(ethers.utils.formatUnits('0x'+shares_hex, 18).replace(/\..*$/, "")/1000000);
+    if(bets<shares) {
+      const apy = (1.0+0.04*bets/shares)**((60*60*24*365)/(16384*2))-1;
+      console.log("Period %s: %s M volume, %s M shares, %s APY", period_num, bets, shares, sprintfjs.sprintf("%.2f", apy*100));
     }
     else {
-      console.log("Period %s: %s M volume, %s M shares", i, bets/1000000, shares/1000000);
+      console.log("Period %s: %s M volume, %s M shares", period_num, bets, shares);
     }
   }
 }

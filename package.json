@@ -6,12 +6,18 @@
   "dependencies": {
     "circomlib": "^2.0.5",
     "circomlibjs": "^0.1.7",
+    "crypto": "^1.0.1",
     "dotenv": "^16.5.0",
     "ethers": "^5.7.2",
     "fixed-merkle-tree": "^0.7.3",
+    "lodash": "^4.17.21",
     "node-fastcgi": "^2.0.0",
     "snarkjs": "^0.7.5",
     "sprintf-js": "^1.1.2",
     "sync-request": "^6.1.0"
+  },
+  "devDependencies": {
+    "webpack": "^5.99.9",
+    "webpack-cli": "^6.0.1"
   }
 }

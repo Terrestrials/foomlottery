@@ -3,6 +3,7 @@ cache
 out
 tmp
 www
+junk
 
 # Secrets
 .env
