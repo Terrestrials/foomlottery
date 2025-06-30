@@ -4,6 +4,7 @@ out
 tmp
 www
 junk
+loc
 
 # Secrets
 .env

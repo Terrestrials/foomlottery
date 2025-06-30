@@ -604,6 +604,8 @@ contract Update179G16Verifier {
 
     function verifyProof(uint[2] calldata _pA, uint[2][2] calldata _pB, uint[2] calldata _pC, uint[183] calldata _pubSignals) public view returns (bool) {
         assembly {
+            // create a memory array for ICx
+
             function checkField(v) {
                 if iszero(lt(v, r)) {
                     mstore(0, 0)
@@ -644,8 +646,390 @@ contract Update179G16Verifier {
                 mstore(_pVk, IC0x)
                 mstore(add(_pVk, 32), IC0y)
 
+                let pICx := mload(0x40)
+                mstore(0x40, add(pICx, 5856)) // 183 * 32 bytes for ICx values starting with IC1x
+            
+                // Store ICx values sequentially
+                mstore(add(pICx, 0), IC1x)
+                mstore(add(pICx, 32), IC2x)
+                mstore(add(pICx, 64), IC3x)
+                mstore(add(pICx, 96), IC4x)
+                mstore(add(pICx, 128), IC5x)
+                mstore(add(pICx, 160), IC6x)
+                mstore(add(pICx, 192), IC7x)
+                mstore(add(pICx, 224), IC8x)
+                mstore(add(pICx, 256), IC9x)
+                mstore(add(pICx, 288), IC10x)
+                mstore(add(pICx, 320), IC11x)
+                mstore(add(pICx, 352), IC12x)
+                mstore(add(pICx, 384), IC13x)
+                mstore(add(pICx, 416), IC14x)
+                mstore(add(pICx, 448), IC15x)
+                mstore(add(pICx, 480), IC16x)
+                mstore(add(pICx, 512), IC17x)
+                mstore(add(pICx, 544), IC18x)
+                mstore(add(pICx, 576), IC19x)
+                mstore(add(pICx, 608), IC20x)
+                mstore(add(pICx, 640), IC21x)
+                mstore(add(pICx, 672), IC22x)
+                mstore(add(pICx, 704), IC23x)
+                mstore(add(pICx, 736), IC24x)
+                mstore(add(pICx, 768), IC25x)
+                mstore(add(pICx, 800), IC26x)
+                mstore(add(pICx, 832), IC27x)
+                mstore(add(pICx, 864), IC28x)
+                mstore(add(pICx, 896), IC29x)
+                mstore(add(pICx, 928), IC30x)
+                mstore(add(pICx, 960), IC31x)
+                mstore(add(pICx, 992), IC32x)
+                mstore(add(pICx, 1024), IC33x)
+                mstore(add(pICx, 1056), IC34x)
+                mstore(add(pICx, 1088), IC35x)
+                mstore(add(pICx, 1120), IC36x)
+                mstore(add(pICx, 1152), IC37x)
+                mstore(add(pICx, 1184), IC38x)
+                mstore(add(pICx, 1216), IC39x)
+                mstore(add(pICx, 1248), IC40x)
+                mstore(add(pICx, 1280), IC41x)
+                mstore(add(pICx, 1312), IC42x)
+                mstore(add(pICx, 1344), IC43x)
+                mstore(add(pICx, 1376), IC44x)
+                mstore(add(pICx, 1408), IC45x)
+                mstore(add(pICx, 1440), IC46x)
+                mstore(add(pICx, 1472), IC47x)
+                mstore(add(pICx, 1504), IC48x)
+                mstore(add(pICx, 1536), IC49x)
+                mstore(add(pICx, 1568), IC50x)
+                mstore(add(pICx, 1600), IC51x)
+                mstore(add(pICx, 1632), IC52x)
+                mstore(add(pICx, 1664), IC53x)
+                mstore(add(pICx, 1696), IC54x)
+                mstore(add(pICx, 1728), IC55x)
+                mstore(add(pICx, 1760), IC56x)
+                mstore(add(pICx, 1792), IC57x)
+                mstore(add(pICx, 1824), IC58x)
+                mstore(add(pICx, 1856), IC59x)
+                mstore(add(pICx, 1888), IC60x)
+                mstore(add(pICx, 1920), IC61x)
+                mstore(add(pICx, 1952), IC62x)
+                mstore(add(pICx, 1984), IC63x)
+                mstore(add(pICx, 2016), IC64x)
+                mstore(add(pICx, 2048), IC65x)
+                mstore(add(pICx, 2080), IC66x)
+                mstore(add(pICx, 2112), IC67x)
+                mstore(add(pICx, 2144), IC68x)
+                mstore(add(pICx, 2176), IC69x)
+                mstore(add(pICx, 2208), IC70x)
+                mstore(add(pICx, 2240), IC71x)
+                mstore(add(pICx, 2272), IC72x)
+                mstore(add(pICx, 2304), IC73x)
+                mstore(add(pICx, 2336), IC74x)
+                mstore(add(pICx, 2368), IC75x)
+                mstore(add(pICx, 2400), IC76x)
+                mstore(add(pICx, 2432), IC77x)
+                mstore(add(pICx, 2464), IC78x)
+                mstore(add(pICx, 2496), IC79x)
+                mstore(add(pICx, 2528), IC80x)
+                mstore(add(pICx, 2560), IC81x)
+                mstore(add(pICx, 2592), IC82x)
+                mstore(add(pICx, 2624), IC83x)
+                mstore(add(pICx, 2656), IC84x)
+                mstore(add(pICx, 2688), IC85x)
+                mstore(add(pICx, 2720), IC86x)
+                mstore(add(pICx, 2752), IC87x)
+                mstore(add(pICx, 2784), IC88x)
+                mstore(add(pICx, 2816), IC89x)
+                mstore(add(pICx, 2848), IC90x)
+                mstore(add(pICx, 2880), IC91x)
+                mstore(add(pICx, 2912), IC92x)
+                mstore(add(pICx, 2944), IC93x)
+                mstore(add(pICx, 2976), IC94x)
+                mstore(add(pICx, 3008), IC95x)
+                mstore(add(pICx, 3040), IC96x)
+                mstore(add(pICx, 3072), IC97x)
+                mstore(add(pICx, 3104), IC98x)
+                mstore(add(pICx, 3136), IC99x)
+                mstore(add(pICx, 3168), IC100x)
+                mstore(add(pICx, 3200), IC101x)
+                mstore(add(pICx, 3232), IC102x)
+                mstore(add(pICx, 3264), IC103x)
+                mstore(add(pICx, 3296), IC104x)
+                mstore(add(pICx, 3328), IC105x)
+                mstore(add(pICx, 3360), IC106x)
+                mstore(add(pICx, 3392), IC107x)
+                mstore(add(pICx, 3424), IC108x)
+                mstore(add(pICx, 3456), IC109x)
+                mstore(add(pICx, 3488), IC110x)
+                mstore(add(pICx, 3520), IC111x)
+                mstore(add(pICx, 3552), IC112x)
+                mstore(add(pICx, 3584), IC113x)
+                mstore(add(pICx, 3616), IC114x)
+                mstore(add(pICx, 3648), IC115x)
+                mstore(add(pICx, 3680), IC116x)
+                mstore(add(pICx, 3712), IC117x)
+                mstore(add(pICx, 3744), IC118x)
+                mstore(add(pICx, 3776), IC119x)
+                mstore(add(pICx, 3808), IC120x)
+                mstore(add(pICx, 3840), IC121x)
+                mstore(add(pICx, 3872), IC122x)
+                mstore(add(pICx, 3904), IC123x)
+                mstore(add(pICx, 3936), IC124x)
+                mstore(add(pICx, 3968), IC125x)
+                mstore(add(pICx, 4000), IC126x)
+                mstore(add(pICx, 4032), IC127x)
+                mstore(add(pICx, 4064), IC128x)
+                mstore(add(pICx, 4096), IC129x)
+                mstore(add(pICx, 4128), IC130x)
+                mstore(add(pICx, 4160), IC131x)
+                mstore(add(pICx, 4192), IC132x)
+                mstore(add(pICx, 4224), IC133x)
+                mstore(add(pICx, 4256), IC134x)
+                mstore(add(pICx, 4288), IC135x)
+                mstore(add(pICx, 4320), IC136x)
+                mstore(add(pICx, 4352), IC137x)
+                mstore(add(pICx, 4384), IC138x)
+                mstore(add(pICx, 4416), IC139x)
+                mstore(add(pICx, 4448), IC140x)
+                mstore(add(pICx, 4480), IC141x)
+                mstore(add(pICx, 4512), IC142x)
+                mstore(add(pICx, 4544), IC143x)
+                mstore(add(pICx, 4576), IC144x)
+                mstore(add(pICx, 4608), IC145x)
+                mstore(add(pICx, 4640), IC146x)
+                mstore(add(pICx, 4672), IC147x)
+                mstore(add(pICx, 4704), IC148x)
+                mstore(add(pICx, 4736), IC149x)
+                mstore(add(pICx, 4768), IC150x)
+                mstore(add(pICx, 4800), IC151x)
+                mstore(add(pICx, 4832), IC152x)
+                mstore(add(pICx, 4864), IC153x)
+                mstore(add(pICx, 4896), IC154x)
+                mstore(add(pICx, 4928), IC155x)
+                mstore(add(pICx, 4960), IC156x)
+                mstore(add(pICx, 4992), IC157x)
+                mstore(add(pICx, 5024), IC158x)
+                mstore(add(pICx, 5056), IC159x)
+                mstore(add(pICx, 5088), IC160x)
+                mstore(add(pICx, 5120), IC161x)
+                mstore(add(pICx, 5152), IC162x)
+                mstore(add(pICx, 5184), IC163x)
+                mstore(add(pICx, 5216), IC164x)
+                mstore(add(pICx, 5248), IC165x)
+                mstore(add(pICx, 5280), IC166x)
+                mstore(add(pICx, 5312), IC167x)
+                mstore(add(pICx, 5344), IC168x)
+                mstore(add(pICx, 5376), IC169x)
+                mstore(add(pICx, 5408), IC170x)
+                mstore(add(pICx, 5440), IC171x)
+                mstore(add(pICx, 5472), IC172x)
+                mstore(add(pICx, 5504), IC173x)
+                mstore(add(pICx, 5536), IC174x)
+                mstore(add(pICx, 5568), IC175x)
+                mstore(add(pICx, 5600), IC176x)
+                mstore(add(pICx, 5632), IC177x)
+                mstore(add(pICx, 5664), IC178x)
+                mstore(add(pICx, 5696), IC179x)
+                mstore(add(pICx, 5728), IC180x)
+                mstore(add(pICx, 5760), IC181x)
+                mstore(add(pICx, 5792), IC182x)
+                mstore(add(pICx, 5824), IC183x)
+
+                // create a memory array for ICy
+                let pICy := mload(0x40)
+                mstore(0x40, add(pICy, 5856)) // 183 * 32 bytes for ICy values starting with IC1y
+                // Store ICy values sequentially
+                mstore(add(pICy, 0), IC1y)
+                mstore(add(pICy, 32), IC2y)
+                mstore(add(pICy, 64), IC3y)
+                mstore(add(pICy, 96), IC4y)
+                mstore(add(pICy, 128), IC5y)
+                mstore(add(pICy, 160), IC6y)
+                mstore(add(pICy, 192), IC7y)
+                mstore(add(pICy, 224), IC8y)
+                mstore(add(pICy, 256), IC9y)
+                mstore(add(pICy, 288), IC10y)
+                mstore(add(pICy, 320), IC11y)
+                mstore(add(pICy, 352), IC12y)
+                mstore(add(pICy, 384), IC13y)
+                mstore(add(pICy, 416), IC14y)
+                mstore(add(pICy, 448), IC15y)
+                mstore(add(pICy, 480), IC16y)
+                mstore(add(pICy, 512), IC17y)
+                mstore(add(pICy, 544), IC18y)
+                mstore(add(pICy, 576), IC19y)
+                mstore(add(pICy, 608), IC20y)
+                mstore(add(pICy, 640), IC21y)
+                mstore(add(pICy, 672), IC22y)
+                mstore(add(pICy, 704), IC23y)
+                mstore(add(pICy, 736), IC24y)
+                mstore(add(pICy, 768), IC25y)
+                mstore(add(pICy, 800), IC26y)
+                mstore(add(pICy, 832), IC27y)
+                mstore(add(pICy, 864), IC28y)
+                mstore(add(pICy, 896), IC29y)
+                mstore(add(pICy, 928), IC30y)
+                mstore(add(pICy, 960), IC31y)
+                mstore(add(pICy, 992), IC32y)
+                mstore(add(pICy, 1024), IC33y)
+                mstore(add(pICy, 1056), IC34y)
+                mstore(add(pICy, 1088), IC35y)
+                mstore(add(pICy, 1120), IC36y)
+                mstore(add(pICy, 1152), IC37y)
+                mstore(add(pICy, 1184), IC38y)
+                mstore(add(pICy, 1216), IC39y)
+                mstore(add(pICy, 1248), IC40y)
+                mstore(add(pICy, 1280), IC41y)
+                mstore(add(pICy, 1312), IC42y)
+                mstore(add(pICy, 1344), IC43y)
+                mstore(add(pICy, 1376), IC44y)
+                mstore(add(pICy, 1408), IC45y)
+                mstore(add(pICy, 1440), IC46y)
+                mstore(add(pICy, 1472), IC47y)
+                mstore(add(pICy, 1504), IC48y)
+                mstore(add(pICy, 1536), IC49y)
+                mstore(add(pICy, 1568), IC50y)
+                mstore(add(pICy, 1600), IC51y)
+                mstore(add(pICy, 1632), IC52y)
+                mstore(add(pICy, 1664), IC53y)
+                mstore(add(pICy, 1696), IC54y)
+                mstore(add(pICy, 1728), IC55y)
+                mstore(add(pICy, 1760), IC56y)
+                mstore(add(pICy, 1792), IC57y)
+                mstore(add(pICy, 1824), IC58y)
+                mstore(add(pICy, 1856), IC59y)
+                mstore(add(pICy, 1888), IC60y)
+                mstore(add(pICy, 1920), IC61y)
+                mstore(add(pICy, 1952), IC62y)
+                mstore(add(pICy, 1984), IC63y)
+                mstore(add(pICy, 2016), IC64y)
+                mstore(add(pICy, 2048), IC65y)
+                mstore(add(pICy, 2080), IC66y)
+                mstore(add(pICy, 2112), IC67y)
+                mstore(add(pICy, 2144), IC68y)
+                mstore(add(pICy, 2176), IC69y)
+                mstore(add(pICy, 2208), IC70y)
+                mstore(add(pICy, 2240), IC71y)
+                mstore(add(pICy, 2272), IC72y)
+                mstore(add(pICy, 2304), IC73y)
+                mstore(add(pICy, 2336), IC74y)
+                mstore(add(pICy, 2368), IC75y)
+                mstore(add(pICy, 2400), IC76y)
+                mstore(add(pICy, 2432), IC77y)
+                mstore(add(pICy, 2464), IC78y)
+                mstore(add(pICy, 2496), IC79y)
+                mstore(add(pICy, 2528), IC80y)
+                mstore(add(pICy, 2560), IC81y)
+                mstore(add(pICy, 2592), IC82y)
+                mstore(add(pICy, 2624), IC83y)
+                mstore(add(pICy, 2656), IC84y)
+                mstore(add(pICy, 2688), IC85y)
+                mstore(add(pICy, 2720), IC86y)
+                mstore(add(pICy, 2752), IC87y)
+                mstore(add(pICy, 2784), IC88y)
+                mstore(add(pICy, 2816), IC89y)
+                mstore(add(pICy, 2848), IC90y)
+                mstore(add(pICy, 2880), IC91y)
+                mstore(add(pICy, 2912), IC92y)
+                mstore(add(pICy, 2944), IC93y)
+                mstore(add(pICy, 2976), IC94y)
+                mstore(add(pICy, 3008), IC95y)
+                mstore(add(pICy, 3040), IC96y)
+                mstore(add(pICy, 3072), IC97y)
+                mstore(add(pICy, 3104), IC98y)
+                mstore(add(pICy, 3136), IC99y)
+                mstore(add(pICy, 3168), IC100y)
+                mstore(add(pICy, 3200), IC101y)
+                mstore(add(pICy, 3232), IC102y)
+                mstore(add(pICy, 3264), IC103y)
+                mstore(add(pICy, 3296), IC104y)
+                mstore(add(pICy, 3328), IC105y)
+                mstore(add(pICy, 3360), IC106y)
+                mstore(add(pICy, 3392), IC107y)
+                mstore(add(pICy, 3424), IC108y)
+                mstore(add(pICy, 3456), IC109y)
+                mstore(add(pICy, 3488), IC110y)
+                mstore(add(pICy, 3520), IC111y)
+                mstore(add(pICy, 3552), IC112y)
+                mstore(add(pICy, 3584), IC113y)
+                mstore(add(pICy, 3616), IC114y)
+                mstore(add(pICy, 3648), IC115y)
+                mstore(add(pICy, 3680), IC116y)
+                mstore(add(pICy, 3712), IC117y)
+                mstore(add(pICy, 3744), IC118y)
+                mstore(add(pICy, 3776), IC119y)
+                mstore(add(pICy, 3808), IC120y)
+                mstore(add(pICy, 3840), IC121y)
+                mstore(add(pICy, 3872), IC122y)
+                mstore(add(pICy, 3904), IC123y)
+                mstore(add(pICy, 3936), IC124y)
+                mstore(add(pICy, 3968), IC125y)
+                mstore(add(pICy, 4000), IC126y)
+                mstore(add(pICy, 4032), IC127y)
+                mstore(add(pICy, 4064), IC128y)
+                mstore(add(pICy, 4096), IC129y)
+                mstore(add(pICy, 4128), IC130y)
+                mstore(add(pICy, 4160), IC131y)
+                mstore(add(pICy, 4192), IC132y)
+                mstore(add(pICy, 4224), IC133y)
+                mstore(add(pICy, 4256), IC134y)
+                mstore(add(pICy, 4288), IC135y)
+                mstore(add(pICy, 4320), IC136y)
+                mstore(add(pICy, 4352), IC137y)
+                mstore(add(pICy, 4384), IC138y)
+                mstore(add(pICy, 4416), IC139y)
+                mstore(add(pICy, 4448), IC140y)
+                mstore(add(pICy, 4480), IC141y)
+                mstore(add(pICy, 4512), IC142y)
+                mstore(add(pICy, 4544), IC143y)
+                mstore(add(pICy, 4576), IC144y)
+                mstore(add(pICy, 4608), IC145y)
+                mstore(add(pICy, 4640), IC146y)
+                mstore(add(pICy, 4672), IC147y)
+                mstore(add(pICy, 4704), IC148y)
+                mstore(add(pICy, 4736), IC149y)
+                mstore(add(pICy, 4768), IC150y)
+                mstore(add(pICy, 4800), IC151y)
+                mstore(add(pICy, 4832), IC152y)
+                mstore(add(pICy, 4864), IC153y)
+                mstore(add(pICy, 4896), IC154y)
+                mstore(add(pICy, 4928), IC155y)
+                mstore(add(pICy, 4960), IC156y)
+                mstore(add(pICy, 4992), IC157y)
+                mstore(add(pICy, 5024), IC158y)
+                mstore(add(pICy, 5056), IC159y)
+                mstore(add(pICy, 5088), IC160y)
+                mstore(add(pICy, 5120), IC161y)
+                mstore(add(pICy, 5152), IC162y)
+                mstore(add(pICy, 5184), IC163y)
+                mstore(add(pICy, 5216), IC164y)
+                mstore(add(pICy, 5248), IC165y)
+                mstore(add(pICy, 5280), IC166y)
+                mstore(add(pICy, 5312), IC167y)
+                mstore(add(pICy, 5344), IC168y)
+                mstore(add(pICy, 5376), IC169y)
+                mstore(add(pICy, 5408), IC170y)
+                mstore(add(pICy, 5440), IC171y)
+                mstore(add(pICy, 5472), IC172y)
+                mstore(add(pICy, 5504), IC173y)
+                mstore(add(pICy, 5536), IC174y)
+                mstore(add(pICy, 5568), IC175y)
+                mstore(add(pICy, 5600), IC176y)
+                mstore(add(pICy, 5632), IC177y)
+                mstore(add(pICy, 5664), IC178y)
+                mstore(add(pICy, 5696), IC179y)
+                mstore(add(pICy, 5728), IC180y)
+                mstore(add(pICy, 5760), IC181y)
+                mstore(add(pICy, 5792), IC182y)
+                mstore(add(pICy, 5824), IC183y)
+
                 // Compute the linear combination vk_x
-                
+
+                // create a loop for g1_mulAccC 
+                for { let i := 0 } lt(i, 5825) { i := add(i, 32) } {
+                    g1_mulAccC(_pVk, mload(add(pICx, i)), mload(add(pICy, i)), calldataload(add(pubSignals, i)))
+                }
+
+                /*                
                 g1_mulAccC(_pVk, IC1x, IC1y, calldataload(add(pubSignals, 0)))
                 
                 g1_mulAccC(_pVk, IC2x, IC2y, calldataload(add(pubSignals, 32)))
@@ -1011,7 +1395,7 @@ contract Update179G16Verifier {
                 g1_mulAccC(_pVk, IC182x, IC182y, calldataload(add(pubSignals, 5792)))
                 
                 g1_mulAccC(_pVk, IC183x, IC183y, calldataload(add(pubSignals, 5824)))
-                
+                */
 
                 // -A
                 mstore(_pPairing, calldataload(pA))
@@ -1064,373 +1448,9 @@ contract Update179G16Verifier {
             mstore(0x40, add(pMem, pLastMem))
 
             // Validate that all evaluations ∈ F
-            
-            checkField(calldataload(add(_pubSignals, 0)))
-            
-            checkField(calldataload(add(_pubSignals, 32)))
-            
-            checkField(calldataload(add(_pubSignals, 64)))
-            
-            checkField(calldataload(add(_pubSignals, 96)))
-            
-            checkField(calldataload(add(_pubSignals, 128)))
-            
-            checkField(calldataload(add(_pubSignals, 160)))
-            
-            checkField(calldataload(add(_pubSignals, 192)))
-            
-            checkField(calldataload(add(_pubSignals, 224)))
-            
-            checkField(calldataload(add(_pubSignals, 256)))
-            
-            checkField(calldataload(add(_pubSignals, 288)))
-            
-            checkField(calldataload(add(_pubSignals, 320)))
-            
-            checkField(calldataload(add(_pubSignals, 352)))
-            
-            checkField(calldataload(add(_pubSignals, 384)))
-            
-            checkField(calldataload(add(_pubSignals, 416)))
-            
-            checkField(calldataload(add(_pubSignals, 448)))
-            
-            checkField(calldataload(add(_pubSignals, 480)))
-            
-            checkField(calldataload(add(_pubSignals, 512)))
-            
-            checkField(calldataload(add(_pubSignals, 544)))
-            
-            checkField(calldataload(add(_pubSignals, 576)))
-            
-            checkField(calldataload(add(_pubSignals, 608)))
-            
-            checkField(calldataload(add(_pubSignals, 640)))
-            
-            checkField(calldataload(add(_pubSignals, 672)))
-            
-            checkField(calldataload(add(_pubSignals, 704)))
-            
-            checkField(calldataload(add(_pubSignals, 736)))
-            
-            checkField(calldataload(add(_pubSignals, 768)))
-            
-            checkField(calldataload(add(_pubSignals, 800)))
-            
-            checkField(calldataload(add(_pubSignals, 832)))
-            
-            checkField(calldataload(add(_pubSignals, 864)))
-            
-            checkField(calldataload(add(_pubSignals, 896)))
-            
-            checkField(calldataload(add(_pubSignals, 928)))
-            
-            checkField(calldataload(add(_pubSignals, 960)))
-            
-            checkField(calldataload(add(_pubSignals, 992)))
-            
-            checkField(calldataload(add(_pubSignals, 1024)))
-            
-            checkField(calldataload(add(_pubSignals, 1056)))
-            
-            checkField(calldataload(add(_pubSignals, 1088)))
-            
-            checkField(calldataload(add(_pubSignals, 1120)))
-            
-            checkField(calldataload(add(_pubSignals, 1152)))
-            
-            checkField(calldataload(add(_pubSignals, 1184)))
-            
-            checkField(calldataload(add(_pubSignals, 1216)))
-            
-            checkField(calldataload(add(_pubSignals, 1248)))
-            
-            checkField(calldataload(add(_pubSignals, 1280)))
-            
-            checkField(calldataload(add(_pubSignals, 1312)))
-            
-            checkField(calldataload(add(_pubSignals, 1344)))
-            
-            checkField(calldataload(add(_pubSignals, 1376)))
-            
-            checkField(calldataload(add(_pubSignals, 1408)))
-            
-            checkField(calldataload(add(_pubSignals, 1440)))
-            
-            checkField(calldataload(add(_pubSignals, 1472)))
-            
-            checkField(calldataload(add(_pubSignals, 1504)))
-            
-            checkField(calldataload(add(_pubSignals, 1536)))
-            
-            checkField(calldataload(add(_pubSignals, 1568)))
-            
-            checkField(calldataload(add(_pubSignals, 1600)))
-            
-            checkField(calldataload(add(_pubSignals, 1632)))
-            
-            checkField(calldataload(add(_pubSignals, 1664)))
-            
-            checkField(calldataload(add(_pubSignals, 1696)))
-            
-            checkField(calldataload(add(_pubSignals, 1728)))
-            
-            checkField(calldataload(add(_pubSignals, 1760)))
-            
-            checkField(calldataload(add(_pubSignals, 1792)))
-            
-            checkField(calldataload(add(_pubSignals, 1824)))
-            
-            checkField(calldataload(add(_pubSignals, 1856)))
-            
-            checkField(calldataload(add(_pubSignals, 1888)))
-            
-            checkField(calldataload(add(_pubSignals, 1920)))
-            
-            checkField(calldataload(add(_pubSignals, 1952)))
-            
-            checkField(calldataload(add(_pubSignals, 1984)))
-            
-            checkField(calldataload(add(_pubSignals, 2016)))
-            
-            checkField(calldataload(add(_pubSignals, 2048)))
-            
-            checkField(calldataload(add(_pubSignals, 2080)))
-            
-            checkField(calldataload(add(_pubSignals, 2112)))
-            
-            checkField(calldataload(add(_pubSignals, 2144)))
-            
-            checkField(calldataload(add(_pubSignals, 2176)))
-            
-            checkField(calldataload(add(_pubSignals, 2208)))
-            
-            checkField(calldataload(add(_pubSignals, 2240)))
-            
-            checkField(calldataload(add(_pubSignals, 2272)))
-            
-            checkField(calldataload(add(_pubSignals, 2304)))
-            
-            checkField(calldataload(add(_pubSignals, 2336)))
-            
-            checkField(calldataload(add(_pubSignals, 2368)))
-            
-            checkField(calldataload(add(_pubSignals, 2400)))
-            
-            checkField(calldataload(add(_pubSignals, 2432)))
-            
-            checkField(calldataload(add(_pubSignals, 2464)))
-            
-            checkField(calldataload(add(_pubSignals, 2496)))
-            
-            checkField(calldataload(add(_pubSignals, 2528)))
-            
-            checkField(calldataload(add(_pubSignals, 2560)))
-            
-            checkField(calldataload(add(_pubSignals, 2592)))
-            
-            checkField(calldataload(add(_pubSignals, 2624)))
-            
-            checkField(calldataload(add(_pubSignals, 2656)))
-            
-            checkField(calldataload(add(_pubSignals, 2688)))
-            
-            checkField(calldataload(add(_pubSignals, 2720)))
-            
-            checkField(calldataload(add(_pubSignals, 2752)))
-            
-            checkField(calldataload(add(_pubSignals, 2784)))
-            
-            checkField(calldataload(add(_pubSignals, 2816)))
-            
-            checkField(calldataload(add(_pubSignals, 2848)))
-            
-            checkField(calldataload(add(_pubSignals, 2880)))
-            
-            checkField(calldataload(add(_pubSignals, 2912)))
-            
-            checkField(calldataload(add(_pubSignals, 2944)))
-            
-            checkField(calldataload(add(_pubSignals, 2976)))
-            
-            checkField(calldataload(add(_pubSignals, 3008)))
-            
-            checkField(calldataload(add(_pubSignals, 3040)))
-            
-            checkField(calldataload(add(_pubSignals, 3072)))
-            
-            checkField(calldataload(add(_pubSignals, 3104)))
-            
-            checkField(calldataload(add(_pubSignals, 3136)))
-            
-            checkField(calldataload(add(_pubSignals, 3168)))
-            
-            checkField(calldataload(add(_pubSignals, 3200)))
-            
-            checkField(calldataload(add(_pubSignals, 3232)))
-            
-            checkField(calldataload(add(_pubSignals, 3264)))
-            
-            checkField(calldataload(add(_pubSignals, 3296)))
-            
-            checkField(calldataload(add(_pubSignals, 3328)))
-            
-            checkField(calldataload(add(_pubSignals, 3360)))
-            
-            checkField(calldataload(add(_pubSignals, 3392)))
-            
-            checkField(calldataload(add(_pubSignals, 3424)))
-            
-            checkField(calldataload(add(_pubSignals, 3456)))
-            
-            checkField(calldataload(add(_pubSignals, 3488)))
-            
-            checkField(calldataload(add(_pubSignals, 3520)))
-            
-            checkField(calldataload(add(_pubSignals, 3552)))
-            
-            checkField(calldataload(add(_pubSignals, 3584)))
-            
-            checkField(calldataload(add(_pubSignals, 3616)))
-            
-            checkField(calldataload(add(_pubSignals, 3648)))
-            
-            checkField(calldataload(add(_pubSignals, 3680)))
-            
-            checkField(calldataload(add(_pubSignals, 3712)))
-            
-            checkField(calldataload(add(_pubSignals, 3744)))
-            
-            checkField(calldataload(add(_pubSignals, 3776)))
-            
-            checkField(calldataload(add(_pubSignals, 3808)))
-            
-            checkField(calldataload(add(_pubSignals, 3840)))
-            
-            checkField(calldataload(add(_pubSignals, 3872)))
-            
-            checkField(calldataload(add(_pubSignals, 3904)))
-            
-            checkField(calldataload(add(_pubSignals, 3936)))
-            
-            checkField(calldataload(add(_pubSignals, 3968)))
-            
-            checkField(calldataload(add(_pubSignals, 4000)))
-            
-            checkField(calldataload(add(_pubSignals, 4032)))
-            
-            checkField(calldataload(add(_pubSignals, 4064)))
-            
-            checkField(calldataload(add(_pubSignals, 4096)))
-            
-            checkField(calldataload(add(_pubSignals, 4128)))
-            
-            checkField(calldataload(add(_pubSignals, 4160)))
-            
-            checkField(calldataload(add(_pubSignals, 4192)))
-            
-            checkField(calldataload(add(_pubSignals, 4224)))
-            
-            checkField(calldataload(add(_pubSignals, 4256)))
-            
-            checkField(calldataload(add(_pubSignals, 4288)))
-            
-            checkField(calldataload(add(_pubSignals, 4320)))
-            
-            checkField(calldataload(add(_pubSignals, 4352)))
-            
-            checkField(calldataload(add(_pubSignals, 4384)))
-            
-            checkField(calldataload(add(_pubSignals, 4416)))
-            
-            checkField(calldataload(add(_pubSignals, 4448)))
-            
-            checkField(calldataload(add(_pubSignals, 4480)))
-            
-            checkField(calldataload(add(_pubSignals, 4512)))
-            
-            checkField(calldataload(add(_pubSignals, 4544)))
-            
-            checkField(calldataload(add(_pubSignals, 4576)))
-            
-            checkField(calldataload(add(_pubSignals, 4608)))
-            
-            checkField(calldataload(add(_pubSignals, 4640)))
-            
-            checkField(calldataload(add(_pubSignals, 4672)))
-            
-            checkField(calldataload(add(_pubSignals, 4704)))
-            
-            checkField(calldataload(add(_pubSignals, 4736)))
-            
-            checkField(calldataload(add(_pubSignals, 4768)))
-            
-            checkField(calldataload(add(_pubSignals, 4800)))
-            
-            checkField(calldataload(add(_pubSignals, 4832)))
-            
-            checkField(calldataload(add(_pubSignals, 4864)))
-            
-            checkField(calldataload(add(_pubSignals, 4896)))
-            
-            checkField(calldataload(add(_pubSignals, 4928)))
-            
-            checkField(calldataload(add(_pubSignals, 4960)))
-            
-            checkField(calldataload(add(_pubSignals, 4992)))
-            
-            checkField(calldataload(add(_pubSignals, 5024)))
-            
-            checkField(calldataload(add(_pubSignals, 5056)))
-            
-            checkField(calldataload(add(_pubSignals, 5088)))
-            
-            checkField(calldataload(add(_pubSignals, 5120)))
-            
-            checkField(calldataload(add(_pubSignals, 5152)))
-            
-            checkField(calldataload(add(_pubSignals, 5184)))
-            
-            checkField(calldataload(add(_pubSignals, 5216)))
-            
-            checkField(calldataload(add(_pubSignals, 5248)))
-            
-            checkField(calldataload(add(_pubSignals, 5280)))
-            
-            checkField(calldataload(add(_pubSignals, 5312)))
-            
-            checkField(calldataload(add(_pubSignals, 5344)))
-            
-            checkField(calldataload(add(_pubSignals, 5376)))
-            
-            checkField(calldataload(add(_pubSignals, 5408)))
-            
-            checkField(calldataload(add(_pubSignals, 5440)))
-            
-            checkField(calldataload(add(_pubSignals, 5472)))
-            
-            checkField(calldataload(add(_pubSignals, 5504)))
-            
-            checkField(calldataload(add(_pubSignals, 5536)))
-            
-            checkField(calldataload(add(_pubSignals, 5568)))
-            
-            checkField(calldataload(add(_pubSignals, 5600)))
-            
-            checkField(calldataload(add(_pubSignals, 5632)))
-            
-            checkField(calldataload(add(_pubSignals, 5664)))
-            
-            checkField(calldataload(add(_pubSignals, 5696)))
-            
-            checkField(calldataload(add(_pubSignals, 5728)))
-            
-            checkField(calldataload(add(_pubSignals, 5760)))
-            
-            checkField(calldataload(add(_pubSignals, 5792)))
-            
-            checkField(calldataload(add(_pubSignals, 5824)))
-            
+            for {let i := 0} lt(i, 5825) {i := add(i, 32)} {
+                checkField(calldataload(add(_pubSignals, i)))
+            }
 
             // Validate all evaluations
             let isValid := checkPairing(_pA, _pB, _pC, _pubSignals, pMem)
