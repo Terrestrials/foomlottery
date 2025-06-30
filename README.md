@@ -41,7 +41,7 @@ DEX WETH balance: 0.250443732151806307
 DEX FOOM price in ETH: 0.000000000039547534
 DEX amountInETH: 0.0001245747321 (105%)
 calculating secret...
-secret: 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39300,7777 (index not final)
+secret: 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a393,00,7777 (index not final)
 hash: 548105043639190655588031349268085347064103983494407046263605690910398806688 (use on basescan.org)
 hash: 0x01363769fdab271fb560f09bcb1427e856d4cec173b2f718e3fa6f1fe57cfaa0
 Do you want to test the luck of the secret on last bets? (0-1024): 
@@ -123,14 +123,14 @@ sending ticket...
 tx hash: 0xaf7c91b5fd54f9f67ee2719a27f0aba480b2c8ef5675bad1e8a8bd8a8ae15a46
 writing ticket to tickets.txt...
 
-secret: 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39300,7777
+secret: 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a393,00,7777
 ```
 
 ### cancel a ticket (just a test)
 
 You can cancel the ticket for a few minutes before the lottery will include it in the tree of tickets. Ignore this step if You don't want to test the cancel.js script.
 ```bash
-./bin/cancel.js 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39300,7777
+./bin/cancel.js 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a393,00,7777
 ``` 
 ```
 Creating proof...
@@ -141,7 +141,7 @@ tx hash: 0x89f901a2a6a26e683a1bce1e75a5c697cee27539b026d5a1975fc317b66d9cc9
 After canceling the ticket You get a refund in FOOM, but there is a 1 M FOOM fee for canceling.
 Now You can try another secret or the same secret again.
 ```bash
-./bin/playETH.js 0 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39300,7777
+./bin/playETH.js 0 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a393,00,7777
 ```
 
 ### submit a ticket again
@@ -159,7 +159,7 @@ DEX WETH balance: 0.250568306883906307
 DEX FOOM price in ETH: 0.00000000003954766
 DEX amountInETH: 0.000124575129 (105%)
 calculating secret...
-secret: 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39300,7777 (index not final)
+secret: 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a393,00,7777 (index not final)
 hash: 548105043639190655588031349268085347064103983494407046263605690910398806688 (use on basescan.org)
 hash: 0x01363769fdab271fb560f09bcb1427e856d4cec173b2f718e3fa6f1fe57cfaa0
 Do you want to test the luck of the secret on last bets? (0-1024): 512
@@ -193,22 +193,22 @@ sending ticket...
 tx hash: 0x35b522d0fc14cb61a7fd064078eeff855e9624d248c5aa2b9ea9138bc33382fd
 writing ticket to tickets.txt...
 
-secret: 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39300,7778
+secret: 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a393,00,7778
 ```
 
 ### check results
 
 Now You can check if You have won:
 ```bash
-./bin/reward.js 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39300,7778
+./bin/reward.js 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a393,00,7778
 ```
 But the lottery needs some time to process and provide the random number for your ticket. It will wait usually up to 30 min on base chain unless you submit a larger ticket.
 ```
-0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39300,7778 bet not processed yet, now at 7777
+0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a393,00,7778 bet not processed yet, now at 7777
 ```
 We have the results after some time:
 ```
-0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39300,7778 0001110011 1101111111111011 0100110010010000111110 0.0
+0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a393,00,7778 0001110011 1101111111111011 0100110010010000111110 0.0
 ```
 The last number shows You reward: 0.0 FOOM. You have lost :-(. To win You need to have a string of zeros printed next to the secret.
 10 zeros for the first reward, 16 and 22 for the second and third largest reward. Well our chances were small, only 1/1024 to win the smallest reward and the parayer did not help this time.
@@ -217,7 +217,7 @@ The last number shows You reward: 0.0 FOOM. You have lost :-(. To win You need t
 
 Let's try to increase our chances and play with power 9 (approximately $50 now). Let's also use the same secret again.
 ```bash
-./bin/play.js 9 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39300
+./bin/play.js 9 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a393
 ```
 The address got FOOM from a friend now so we are able to pay with FOOM instead of ETH.
 ```
@@ -228,7 +228,7 @@ FOOM balance: 2050281089.899306439080045063
 Lottery balance: 0.0
 FOOM  needed: 514000000.0
 calculating secret...
-secret: 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39309,7788 (index not final)
+secret: 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a393,09,7788 (index not final)
 hash: 548105043639190655588031349268085347064103983494407046263605690910398806688 (use on basescan.org)
 hash: 0x01363769fdab271fb560f09bcb1427e856d4cec173b2f718e3fa6f1fe57cfaa0
 Do you want to test the luck of the secret on last bets? (0-1024): 
@@ -240,19 +240,19 @@ sending ticket...
 tx hash: 0x75699b285a94c509b17592623095eb9154ca49ded9d3035bfbf4a6ca8ee0184b
 writing ticket to tickets.txt...
 
-secret: 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39309,7798
+secret: 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a393,09,7798
 ```
 No luck :-(
 ```
-0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39309,7798 1_________ 0110000111101010 0001011011010100101110 0.0
+0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a393,09,7798 1_________ 0110000111101010 0001011011010100101110 0.0
 ```
 Now reward.js masks the required positions for the first reward but the remaining position got a '1' instead of '0'. Let's try again:
 ```
-0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39309,7806 0_________ 0110000111011110 1010000111000110011011 1024000000.0
+0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a393,09,7806 0_________ 0110000111011110 1010000111000110011011 1024000000.0
 ```
 yes!!! and again:
 ```
-0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39309,7808 0_________ 0101001110100001 0101010110101001011001 1024000000.0
+0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a393,09,7808 0_________ 0101001110100001 0101010110101001011001 1024000000.0
 ```
 Won again!!! Cool. We have now made a profit :-). We have now 2 rewards to collect. Remember not to show the secrets to anybody!
 
@@ -261,7 +261,7 @@ Won again!!! Cool. We have now made a profit :-). We have now 2 rewards to colle
 Let's try collecting the first ticket and send it to new fresh address 0x1A91e11A45B51d749beC7774075f3824b4948640.
 You can either change the private key in the .env file or provide the new address as third parameter to collect.js
 ```bash
-./bin/collect.js 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39309,7806 0 0x1A91e11A45B51d749beC7774075f3824b4948640
+./bin/collect.js 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a393,09,7806 0 0x1A91e11A45B51d749beC7774075f3824b4948640
 ```
 YES, collect through a relayer later and 2 times NO because we do not want to collect now:
 ```
@@ -303,7 +303,7 @@ You can verify on [basescan](https://basescan.org/tx/0x215dac4e1e3cb60e15e1b820b
 
 Let's switch to the new address (change the private key in .env) and collect the second reward directly without a relayer but invest the funds in the lottery.
 ```bash
-./bin/collect.js 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a39309,7808 1024000000.0
+./bin/collect.js 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a393,09,7808 1024000000.0
 ```
 For the prompts, we will answer 'y' to calculate the receipt, 'n' to using a relayer, and 'y' to collecting the reward ourselves.
 ```
