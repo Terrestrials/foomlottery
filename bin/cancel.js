@@ -6,7 +6,7 @@ const { ethers } = require("ethers");
 const readline = require('readline');
 const { hexToBigint, bigintToHex, leBigintToBuffer, reverseBits, leBufferToBigint } = require("./utils/bigint.js");
 const { pedersenHash } = require("./utils/pedersen.js");
-const { findBet } = require("./utils/mimcMerkleTree.js");
+const { findBet, readSecretPowerIndex } = require("./utils/mimcMerkleTree.js");
 const sprintfjs = require("sprintf-js");
 const chain = require("../forge-ffi-scripts/utils/chain.js");
 
@@ -31,24 +31,21 @@ async function main() {
     console.log("Usage: cancel.js <ticket>");
     process.exit(1);
   }
-  const secret_power = hexToBigint(inputs[0].replace(/,.*/, ''));
-  const startindex = parseInt(inputs[0].replace(/.*,/, ''));
+  const [secret,power,index] = readSecretPowerIndex(inputs[0]);
   if(!process.env.FOOM_URL) {
     process.env.FOOM_URL = chain.foom_url();
   }
 
-  const secret = secret_power>>8n;
-  const power = secret_power & 0x1fn;
   const hash = await pedersenHash(leBigintToBuffer(secret, 31));
   const hash_power1 = hash + power + 1n;
-  const [betIndex,betRand,nextIndex] = findBet(hash_power1,startindex);
+  const [betIndex,betRand,nextIndex] = findBet(hash_power1,index);
   if(betIndex>0 && betRand>0n){
     console.log("hash: %s", bigintToHex(hash_power1));
-    throw("bet already processed for "+bigintToHex(hash_power1)+" starting at "+startindex.toString(10));
+    throw("bet already processed for "+bigintToHex(hash_power1)+" starting at "+index.toString(10));
   }
   if(betIndex==0){
     console.log("hash: %s", bigintToHex(hash_power1));
-    throw("bet not found for "+bigintToHex(hash_power1)+" starting at "+startindex.toString(10));
+    throw("bet not found for "+bigintToHex(hash_power1)+" starting at "+index.toString(10));
   }
   
   const input = {

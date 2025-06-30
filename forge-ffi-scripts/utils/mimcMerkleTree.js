@@ -26,6 +26,24 @@ function touchfile(path) {
   }
 }
 
+function readSecretPowerIndex(line) {
+  if(line.match(/^0x[0-9a-fA-F]{64}/)) {
+    const secret_power = hexToBigint(line.replace(/,.*/, ''));
+    const startindex = parseInt(line.replace(/.*,/, ''));
+    const secret = secret_power>>8n;
+    const power = secret_power & 0x1fn;        
+    return [secret,power,startindex];
+  }
+  if(line.match(/^0x[0-9a-fA-F]{62}/)) {
+    const [secret_str,power_str,index_str] = line.split(',');
+    return [hexToBigint(secret_str),BigInt(parseInt(power_str||"0",16)),parseInt(index_str||"0",10)];
+  }
+  return [0n,0n,0];
+}
+function printSecretPowerIndex(secret,power,index) {
+  return sprintfjs.sprintf("0x%s,%s,%s",no0x(bigintToHex(secret)).padStart(62,'0'),no0x(bigintToHex(power)).padStart(2,'0'),index.toString(10));
+}
+
 function getLines(path) {
   let fileold;
   let textold;
@@ -695,4 +713,6 @@ module.exports = {
   readLastPeriod,
   appendLastPeriod,
   keepLastLines,
+  readSecretPowerIndex,
+  printSecretPowerIndex,
 };

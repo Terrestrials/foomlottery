@@ -4,7 +4,7 @@ const { ethers } = require("ethers");
 const readline = require('readline');
 const { pedersenHash } = require("./utils/pedersen.js");
 const { rbigint, bigintToHex, leBigintToBuffer, hexToBigint } = require("./utils/bigint.js");
-const { readLast, secretLuck } = require("./utils/mimcMerkleTree.js");
+const { readLast, secretLuck, readSecretPowerIndex, printSecretPowerIndex } = require("./utils/mimcMerkleTree.js");
 const fs = require("fs");
 const sprintfjs = require("sprintf-js");
 const chain = require("../forge-ffi-scripts/utils/chain.js");
@@ -32,8 +32,8 @@ async function main() {
     console.log("Usage: playETH.js <power:0-22> <0 or secret> <prayer:optional>");
     process.exit(1);
   }
-  let power = parseInt(inputs[0]);
-  let secret = hexToBigint(inputs[1].replace(/,.*/, ""))>>8n;
+  let [secret,power,index] = readSecretPowerIndex(inputs[1]);
+  power = parseInt(inputs[0]);
   if(secret == 0n) {
     secret = rbigint(31)-10000n;
   }
@@ -99,7 +99,7 @@ async function main() {
   }
   let hash = 0n;
   let i = 0n;
-  let secret_power = 0n;
+  //let secret_power = 0n;
   for(;;){
     console.log("calculating secret...");
     for(; i < 10000n; i++) {
@@ -110,9 +110,9 @@ async function main() {
       secret = secret + 1n;
     }
     if(i >= 10000n) { throw new Error("Failed to create ticket"); }
-    secret_power = secret<<8n | BigInt(power);
+    //secret_power = secret<<8n | BigInt(power);
     const [nextIndex,blockNumber,lastRoot,lastLeaf] = readLast();
-    console.log("secret: %s,%s (index not final)",bigintToHex(secret_power),nextIndex.toString());
+    console.log("secret: %s (index not final)",printSecretPowerIndex(secret,power,nextIndex));
     console.log("hash: %s (use on basescan.org)",hash.toString());
     console.log("hash: %s",bigintToHex(hash));
 
@@ -184,9 +184,10 @@ async function main() {
     }
     // append to tickets.txt
     console.log("writing ticket to tickets.txt...");
-    console.log("\nsecret: %s,%s\n",bigintToHex(secret_power),newIndex.toString());
+    const ticket = printSecretPowerIndex(secret,power,newIndex);
+    console.log("\nsecret: %s\n",ticket);
     const ticketsFile = fs.openSync("tickets.txt", "a");
-    fs.writeSync(ticketsFile, `${bigintToHex(secret_power)},${newIndex.toString()}\n`);
+    fs.writeSync(ticketsFile, ticket+"\n");
     fs.closeSync(ticketsFile);
   } else {
     console.log("ERROR: logBetIn not found! Transaction may have failed. Ticket not saved in tickets.txt!");

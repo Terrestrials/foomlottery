@@ -6,7 +6,7 @@ const { ethers } = require("ethers");
 const readline = require('readline');
 const { hexToBigint, bigintToHex, leBigintToBuffer, reverseBits, leBufferToBigint } = require("./utils/bigint.js");
 const { pedersenHash } = require("./utils/pedersen.js");
-const { getPath, findBet, readFees } = require("./utils/mimcMerkleTree.js");
+const { getPath, findBet, readFees, readSecretPowerIndex } = require("./utils/mimcMerkleTree.js");
 const circomlibjs = require("circomlibjs");
 const sprintfjs = require("sprintf-js");
 const chain = require("../forge-ffi-scripts/utils/chain.js");
@@ -39,8 +39,7 @@ async function main() {
   const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
   const lottery = new ethers.Contract(chain.lottery_address(), chain.lottery_abi(), wallet);
 
-  const secret_power = hexToBigint(inputs[0].replace(/,.*/, ''));
-  const startindex = parseInt(inputs[0].replace(/.*,/, ''));
+  const [secret,power,index] = readSecretPowerIndex(inputs[0]);
   const invest_in_FOOM = ethers.utils.parseUnits(inputs[1]||"0.0", 18);
   const recipient_address = hexToBigint(inputs[2]||wallet.address);
   const [min_fee_in_FOOM_tx,max_refund_in_ETH_tx,relayer_address_official] = readFees();
@@ -56,17 +55,17 @@ async function main() {
   //process.exit(0);
 
   const mimcsponge = await circomlibjs.buildMimcSponge();
-  const secret = secret_power>>8n;
-  const power = secret_power & 0x1fn;
+  //const secret = secret_power>>8n;
+  //const power = secret_power & 0x1fn;
   const hash = await pedersenHash(leBigintToBuffer(secret, 31));
   const hash_power1 = hash + power + 1n;
-  const [betIndex,betRand,nextIndex] = findBet(hash_power1,startindex);
+  const [betIndex,betRand,nextIndex] = findBet(hash_power1,index);
   if(betIndex>0 && betRand==0n){
-    console.log("bet not processed yet for "+bigintToHex(hash_power1)+" starting at "+startindex.toString());
+    console.log("bet not processed yet for "+bigintToHex(hash_power1)+" starting at "+index.toString());
     process.exit(1);
   }
   if(betIndex==0){
-    console.log("bet not found for "+bigintToHex(hash_power1)+" starting at "+startindex.toString());
+    console.log("bet not found for "+bigintToHex(hash_power1)+" starting at "+index.toString());
     process.exit(1);
   }
   const bigindex = BigInt(betIndex);

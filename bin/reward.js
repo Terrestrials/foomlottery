@@ -2,9 +2,9 @@
 const dotenv = require("dotenv");
 const { ethers } = require("ethers");
 const fs = require("fs");
-const { hexToBigint, leBigintToBuffer, leBufferToBigint, bigintToHex } = require("./utils/bigint.js");
+const { hexToBigint, leBigintToBuffer, leBufferToBigint } = require("./utils/bigint.js");
 const { pedersenHash } = require("./utils/pedersen.js");
-const { findBet } = require("./utils/mimcMerkleTree.js");
+const { findBet, readSecretPowerIndex } = require("./utils/mimcMerkleTree.js");
 const circomlibjs = require("circomlibjs");
 const chain = require("../forge-ffi-scripts/utils/chain.js");
 
@@ -37,15 +37,12 @@ async function main() {
     process.env.FOOM_URL = chain.foom_url();
   }
   for(const ticket of tickets) {
-    const secret_power = hexToBigint(ticket.replace(/,.*/, ''));
-    const startindex = parseInt(ticket.replace(/.*,/, ''));
+    const [secret,power,index] = readSecretPowerIndex(ticket);
 
     const mimcsponge = await circomlibjs.buildMimcSponge();
-    const secret = secret_power>>8n;
-    const power = secret_power & 0x1fn;
     const hash = await pedersenHash(leBigintToBuffer(secret, 31));
     const hash_power1 = hash + power + 1n;
-    const [betIndex,betRand,nextIndex] = findBet(hash_power1,startindex);
+    const [betIndex,betRand,nextIndex] = findBet(hash_power1,index);
     if(betIndex>0 && betRand==0n){
       //console.log("hash: %s", bigintToHex(hash_power1));
       console.log(ticket+" bet not processed yet, now at "+betIndex.toString(10));
