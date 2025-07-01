@@ -425,6 +425,10 @@ Remember, profits from the lottery should be used to improve your afterlife soul
 ### setting up a relayer
 
 You can use the srv/monitor.js script to create a local relayer that we have used. Create a www directory.
+Initialize and wipe the www directory:
+```bash
+./forge-ffi-scripts/init.bash
+```
 You can start monitor.js to read all logs from the beginning but you can jump start the relayer by copying the www drirectory from 
 [foom.cash](https://foom.cash/files/base). Create a www/fees.csv file to inform clients about your fees and relayer address.
 

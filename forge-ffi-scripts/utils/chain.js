@@ -5,7 +5,23 @@ function bet_min() {
   throw new Error("CHAIN not set");
 }
 
+function cgi_port() {
+  if(process.env.CGI_PORT){
+    return process.env.CGI_PORT;
+  }
+  if(process.env.CHAIN == "BASE") {
+    return '9000';
+  }
+  if(process.env.CHAIN == "ETHEREUM") {
+    return '9001';
+  }
+  throw new Error("CHAIN not set");
+}
+
 function rpc_url() {
+  if(process.env.RPC_URL){
+    return process.env.RPC_URL;
+  }
   if(process.env.CHAIN == "BASE") {
     return 'https://mainnet.base.org/';
   }
@@ -16,6 +32,9 @@ function rpc_url() {
 }
 
 function foom_url() {
+  if(process.env.FOOM_URL){
+    return process.env.FOOM_URL;
+  }
   if(process.env.CHAIN == "BASE") {
     return 'https://foom.cash/files/base';
   }
@@ -26,6 +45,9 @@ function foom_url() {
 }
 
 function gas_price_limit() {
+  if(process.env.GAS_PRICE_LIMIT){
+    return process.env.GAS_PRICE_LIMIT;
+  }
   if(process.env.CHAIN == "BASE") {
     return "0.02";
   }
@@ -61,6 +83,16 @@ function dex_address() {
   }
   if(process.env.CHAIN == "ETHEREUM") {
     return '0x5cd0ad98ba6288ed7819246a1ebc0386c32c314b';
+  }
+  throw new Error("CHAIN not set");
+}
+
+function dex_inverse() {
+  if(process.env.CHAIN == "BASE") {
+    return false;
+  }
+  if(process.env.CHAIN == "ETHEREUM") {
+    return true;
   }
   throw new Error("CHAIN not set");
 }
@@ -929,4 +961,6 @@ module.exports = {
   lottery_address,
   lottery_abi,
   weth_abi,
+  cgi_port,
+  dex_inverse
 };

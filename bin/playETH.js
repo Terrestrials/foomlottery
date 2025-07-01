@@ -83,7 +83,9 @@ async function main() {
   const wethBalance = await weth.balanceOf(chain.dex_address());
   console.log("DEX WETH balance: %s", ethers.utils.formatEther(wethBalance));
   const slot0 = await foomdex.slot0();
-  const price = ethers.BigNumber.from(slot0.sqrtPriceX96).mul(ethers.BigNumber.from(slot0.sqrtPriceX96)).mul(10n**18n).div(2n**192n);
+  const price_raw = ethers.BigNumber.from(slot0.sqrtPriceX96).mul(ethers.BigNumber.from(slot0.sqrtPriceX96)).mul(10n**18n).div(2n**192n);
+  console.log("DEX FOOM raw price in ETH: %s", ethers.utils.formatEther(price_raw));
+  const price = chain.dex_inverse()?ethers.BigNumber.from(10n**36n).div(price_raw):price_raw;
   console.log("DEX FOOM price in ETH: %s", ethers.utils.formatEther(price));
   //const amountInETH = price.mul(foom_needed).div(10n**18n).mul(200n).div(100n);
   //console.log("DEX amountInETH: %s (200%%)", ethers.utils.formatEther(amountInETH));

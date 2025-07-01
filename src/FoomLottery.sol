@@ -116,7 +116,8 @@ contract FoomLottery {
     IUpdate179 public immutable update179;
     ISwapRouter public router; // V3FOOM dex, can change
 
-    address private constant WETH_ADDRESS = address(0x4200000000000000000000000000000000000006);
+  //address private constant WETH_ADDRESS = address(0x4200000000000000000000000000000000000006); // on base
+    address private constant WETH_ADDRESS = address(0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2); // on ethereum
     uint private constant FIELD_SIZE = 21888242871839275222246405745257275088548364400416034343698204186575808495617;
     uint private constant merkleTreeLevels = 32 ; // number of Merkle Tree levels, should be 40 in the future
     uint public constant periodBlocks = 16384 ; // number of blocks in a period

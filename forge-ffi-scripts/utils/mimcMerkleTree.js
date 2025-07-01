@@ -299,6 +299,9 @@ function writeWaiting(index,hash,blocknumber){
 
 function readWaitingBlocknumber(){
   const lines = getLines("waiting.csv");
+  if(lines.length==0) {
+    return 0;
+  }
   const values = lines[0].split(',');
   if(values.length==0) {
     return 0;

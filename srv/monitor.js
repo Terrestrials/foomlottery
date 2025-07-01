@@ -145,7 +145,7 @@ async function reveal(provider,lottery,index,commitIndex,commitHash,commitBlockH
 async function readLogs(provider,lottery,generator,walletAddress) {
   const CHUNK_SIZE = 99;
   let [lastIndex,lastBlockNumber,lastRoot,lastLeaf] = tree.readLast();
-  const [logsBlockNumber,logsTransactionIndex] = tree.readLastLog();
+  let [logsBlockNumber,logsTransactionIndex] = tree.readLastLog();
   if(logsBlockNumber == 0) {
     logsBlockNumber = chain.log_start();
   }
@@ -337,8 +337,8 @@ async function main() {
     }
   });
 
-  server.listen(9000, '127.0.0.1', () => {
-    console.log("Server started on port 9000");
+  server.listen(chain.cgi_port(), '127.0.0.1', () => {
+    console.log("Server started on port "+chain.cgi_port());
   });
   
   // run forever
