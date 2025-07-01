@@ -9,6 +9,7 @@ loc
 # Secrets
 .env
 tickets.*
+luck.csv
 forge-ffi-scripts/utils/prayers.js
 
 # Circom

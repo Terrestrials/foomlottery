@@ -158,14 +158,27 @@ function readRand(lastIndex,numRand){
   return rands;
 }
 
-async function secretLuck(secret,nextIndex,numRand){
+async function secretLuck(secret,nextIndex,numRand,filename=''){
   const mimcsponge = await circomlibjs.buildMimcSponge();
   const rands = readRand(nextIndex,numRand);
   let wins = [];
-  for(let i=0;i<23;i++) {
+  for(let i=0;i<=22;i++) {
     wins.push(0);
   }
   wins.push(rands.length);
+//let head="1111111111111111111111,0000000000000000,0000000000,  0";
+  let head="                22bits,          16bits,    10bits,  0";
+  for(let power=1;power<10;power++) {
+    head+=",  "+power;
+  }
+  for(let power=11;power<16;power++) {
+    head+=", "+power;
+  }
+  for(let power=17;power<22;power++) {
+    head+=", "+power;
+  }
+  head+=",index,randomhex\n";
+  let hits='';
   for(let i=0;i<rands.length;i++) {
     const [betIndex,betRand] = rands[i].split(',');
     const bigBetIndex = hexToBigint(betIndex);
@@ -177,22 +190,32 @@ async function secretLuck(secret,nextIndex,numRand){
     //if(rew1+rew2+rew3>0) {
     //  console.log("dice: %s, rew1: %d, rew2: %d, rew3: %d, betIndex: %s, betRand: %s", dice.toString(2).padStart(10+16+22,'0'), rew1, rew2, rew3, betIndex, betRand);
     //}
+    const dice_str = dice.toString(2).padStart(10+16+22,'0');
+    hits+=dice_str.slice(0,22)+","+dice_str.slice(22,22+16)+","+dice_str.slice(38,38+10);
     wins[0] += rew1 + rew2 + rew3;
-    for(let power=1;power<=10;power++) {
+    hits+=","+(rew3>0?"1":"_")+(rew2>0?"1":"_")+(rew1>0?"1":"_");
+    for(let power=1;power<10;power++) {
       const bigPower = BigInt(power);
       const newrew1 = (dice & (0b1111111111n<<bigPower) & 0b1111111111n)?0:2**10;
       wins[power] += newrew1 + rew2 + rew3;
+      hits+=","+(rew3>0?"1":"_")+(rew2>0?"1":"_")+(newrew1>0?"1":"_");
     }
-    for(let power=11;power<=16;power++) {
+    for(let power=11;power<16;power++) {
       const bigPower = BigInt(power);
       const newrew2 = (dice & (0b11111111111111110000000000n<<bigPower) & 0b11111111111111110000000000n)?0:2**16;
       wins[power] += rew1 + newrew2 + rew3;
+      hits+=","+(rew3>0?"1":"_")+(newrew2>0?"1":"_")+(rew1>0?"1":"_");
     }
-    for(let power=17;power<=22;power++) {
+    for(let power=17;power<22;power++) {
       const bigPower = BigInt(power);
       const newrew3 = (dice & (0b111111111111111111111100000000000000000000000000n<<bigPower) & 0b111111111111111111111100000000000000000000000000n)?0:2**22;
       wins[power] += rew1 + rew2 + newrew3;
+      hits+=","+(newrew3>0?"1":"_")+(rew2>0?"1":"_")+(rew1>0?"1":"_");
     }
+    hits+=","+parseInt(betIndex,16).toString(10)+","+betRand+"\n";
+  }
+  if(filename!="") {
+    writeFileSync(filename, head+hits);
   }
   return wins;
 }

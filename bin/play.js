@@ -106,7 +106,7 @@ async function main() {
       const askluck = sprintfjs.sprintf("Do you want to test the luck of the secret on last bets? (0-1024): ");
       const answerluck = parseInt(await question(askluck));
       if(answerluck > 0 && answerluck <= 1024) {
-        const wins = await secretLuck(secret,nextIndex,answerluck);
+        const wins = await secretLuck(secret,nextIndex,answerluck,"luck.csv");
         const bets = wins[23];
         console.log("total bets: %d (values in M FOOM)", bets);
         console.log(sprintfjs.sprintf("%5s %11s %11s %11s %11s %3s %11s","power","cost","reward","profit","LUCK  %","   ","netprofit"));
