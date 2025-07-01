@@ -1,5 +1,5 @@
 function bet_min() {
-  if(process.env.CHAIN == "BASE") {
+  if(process.env.CHAIN == "BASE" || process.env.CHAIN == "ETHEREUM") {
     return "1000000";
   }
   throw new Error("CHAIN not set");
@@ -9,12 +9,18 @@ function rpc_url() {
   if(process.env.CHAIN == "BASE") {
     return 'https://mainnet.base.org/';
   }
+  if(process.env.CHAIN == "ETHEREUM") {
+    return 'https://ethereum-rpc.publicnode.com';
+  }
   throw new Error("CHAIN not set");
 }
 
 function foom_url() {
   if(process.env.CHAIN == "BASE") {
     return 'https://foom.cash/files/base';
+  }
+  if(process.env.CHAIN == "ETHEREUM") {
+    return 'https://foom.cash/files/ethereum';
   }
   throw new Error("CHAIN not set");
 }
@@ -23,12 +29,18 @@ function gas_price_limit() {
   if(process.env.CHAIN == "BASE") {
     return "0.02";
   }
+  if(process.env.CHAIN == "ETHEREUM") {
+    return "1.5";
+  }
   throw new Error("CHAIN not set");
 }
 
 function wait_blocks() {
   if(process.env.CHAIN == "BASE") {
     return 5;
+  }
+  if(process.env.CHAIN == "ETHEREUM") {
+    return 2;
   }
   throw new Error("CHAIN not set");
 }
@@ -37,6 +49,9 @@ function log_start() {
   if(process.env.CHAIN == "BASE") {
     return 30899833;
   }
+  if(process.env.CHAIN == "ETHEREUM") {
+    return 22826378;
+  }
   throw new Error("CHAIN not set");
 }
 
@@ -44,11 +59,14 @@ function dex_address() {
   if(process.env.CHAIN == "BASE") {
     return '0xc5adb6F67c54D187a9FD8bA4994855e35963B69D';
   }
+  if(process.env.CHAIN == "ETHEREUM") {
+    return '0x5cd0ad98ba6288ed7819246a1ebc0386c32c314b';
+  }
   throw new Error("CHAIN not set");
 }
 
 function dex_abi() {
-  if(process.env.CHAIN == "BASE") {
+  if(process.env.CHAIN == "BASE" || process.env.CHAIN == "ETHEREUM") {
     return [
       "function slot0() external view returns (uint160 sqrtPriceX96, int24 tick, uint16 observationIndex, uint16 observationCardinality, uint16 observationCardinalityNext, uint8 feeProtocol, bool unlocked)",
     ];
@@ -59,6 +77,9 @@ function dex_abi() {
 function weth_address() {
   if(process.env.CHAIN == "BASE") {
     return '0x4200000000000000000000000000000000000006';
+  }
+  if(process.env.CHAIN == "ETHEREUM") {
+    return '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2';
   }
   throw new Error("CHAIN not set");
 }
@@ -71,11 +92,14 @@ function foom_address() {
   if(process.env.CHAIN == "BASE") {
     return '0x02300aC24838570012027E0A90D3FEcCEF3c51d2';
   }
+  if(process.env.CHAIN == "ETHEREUM") {
+    return '0xd0D56273290D339aaF1417D9bfa1bb8cFe8A0933';
+  }
   throw new Error("CHAIN not set");
 }
 
 function foom_abi() {
-  if(process.env.CHAIN == "BASE") {
+  if(process.env.CHAIN == "BASE" || process.env.CHAIN == "ETHEREUM") {
     return [
       "function balanceOf(address) view returns (uint256)",
       "function approve(address,uint256) external returns (bool)",
@@ -89,6 +113,9 @@ function foom_abi() {
 function lottery_address() {
   if(process.env.CHAIN == "BASE") {
     return '0xdb203504ba1fea79164AF3CeFFBA88C59Ee8aAfD';
+  }
+  if(process.env.CHAIN == "ETHEREUM") {
+    return '0xd5A3bBb90f919BB7EB53C0909F4e62f42F087Add';
   }
   throw new Error("CHAIN not set");
 }
