@@ -147,7 +147,7 @@ function lottery_address() {
     return '0xdb203504ba1fea79164AF3CeFFBA88C59Ee8aAfD';
   }
   if(process.env.CHAIN == "ETHEREUM") {
-    return '0xd5A3bBb90f919BB7EB53C0909F4e62f42F087Add';
+    return '0x239AF915abcD0a5DCB8566e863088423831951f8';
   }
   throw new Error("CHAIN not set");
 }
