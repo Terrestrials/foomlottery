@@ -89,8 +89,8 @@ async function main() {
   console.log("DEX FOOM price in ETH: %s", ethers.utils.formatEther(price));
   //const amountInETH = price.mul(foom_needed).div(10n**18n).mul(200n).div(100n);
   //console.log("DEX amountInETH: %s (200%%)", ethers.utils.formatEther(amountInETH));
-  const amountInETH = price.mul(foom_needed).div(10n**18n).mul(200n).div(100n);
-  console.log("DEX amountInETH: %s (200%%)", ethers.utils.formatEther(amountInETH));
+  const amountInETH = price.mul(foom_needed).div(10n**18n).mul(105n).div(100n);
+  console.log("DEX amountInETH: %s (105%%)", ethers.utils.formatEther(amountInETH));
   
   if(balance.lt(amountInETH)) {
     console.log("Not enough ETH for this ticket power. You need %s ETH. You have %s ETH.The transaction from this account will fail.",
