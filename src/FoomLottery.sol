@@ -329,7 +329,7 @@ contract FoomLottery {
             .ExactInputSingleParams({
                 tokenIn: WETH_ADDRESS,
                 tokenOut: address(token),
-                fee: 3000, //100 for dai
+                fee: 500, // 500 on ETH, 3000 on BASE
                 recipient: address(this),
                 amountIn: msg.value,
                 amountOutMinimum: 0,
