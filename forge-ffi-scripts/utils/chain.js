@@ -115,7 +115,7 @@ function log_start() {
     return 30899833;
   }
   if(process.env.CHAIN == "ETHEREUM") {
-    return 22826378;
+    return 22832278;
   }
   throw new Error("CHAIN not set");
 }
