@@ -252,6 +252,9 @@ async function main() {
   //console.log("Wallet address:", wallet.address);
   //const balance = await provider.getBalance(wallet.address);
   //console.log("Wallet balance:", ethers.utils.formatEther(balance));
+  const foomdex = new ethers.Contract(chain.dex_address(), chain.dex_abi(), wallet);
+  const foom = new ethers.Contract(chain.foom_address(), chain.foom_abi(), wallet);
+  const weth = new ethers.Contract(chain.weth_address(), chain.weth_abi(), wallet);
 
   // create a fastcgi server and start on port 9000
   const server = fastcgi.createServer(async (req, res) => {
@@ -328,6 +331,7 @@ async function main() {
         console.log("tx hash: %s", tx);
         res.writeHead(200, { 'Content-Type': 'text/plain' });
         res.end("TX: "+tx.hash);
+        await chain.manage(provider,wallet,lottery,foomdex,foom,weth,gasPrice,false);
       } else {
         res.writeHead(200, { 'Content-Type': 'text/plain' });
         res.end("ERROR: no receipt!");
@@ -345,9 +349,6 @@ async function main() {
   });
   
   // run forever
-  const foomdex = new ethers.Contract(chain.dex_address(), chain.dex_abi(), wallet);
-  const foom = new ethers.Contract(chain.foom_address(), chain.foom_abi(), wallet);
-  const weth = new ethers.Contract(chain.weth_address(), chain.weth_abi(), wallet);
   while(true) {
     await rememberHash(provider,lottery);
     generator = await readLogs(provider,lottery,generator,wallet,foomdex,foom,weth);
