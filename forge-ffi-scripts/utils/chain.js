@@ -81,6 +81,7 @@ async function manage(provider, wallet, lottery, foomdex, foom, weth, gasPrice, 
   const price = dex_inverse()?ethers.BigNumber.from(10n**36n).div(price_raw):price_raw;
   if(verbose){console.log("DEX FOOM price in ETH: %s", ethers.utils.formatEther(price));}
   if(balance.gt(minBalance)){
+    if(verbose){console.log("ETH balance is greater than minimum balance %s. No need to refill.", ethers.utils.formatEther(minBalance));}
     return;
   }
   console.log("ETH balance low %s < %s ETH. Try refilling...", ethers.utils.formatEther(balance), ethers.utils.formatEther(minBalance));
