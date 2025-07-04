@@ -115,7 +115,7 @@ async function main() {
     //secret_power = secret<<8n | BigInt(power);
     const [nextIndex,blockNumber,lastRoot,lastLeaf] = readLast();
     console.log("secret: %s (index not final)",printSecretPowerIndex(secret,power,nextIndex));
-    console.log("hash: %s (use on basescan.org)",hash.toString());
+    //console.log("hash: %s (use on basescan.org)",hash.toString());
     console.log("hash: %s",bigintToHex(hash));
 
     if(inputs.length < 3) {
