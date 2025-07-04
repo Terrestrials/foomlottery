@@ -36,7 +36,7 @@ async function sell(wallet, amountIn, amountOut, gasPrice, foom, weth) {
   const allowance = await foom.allowance(wallet.address, router_address);
   if(allowance.lt(amountIn)) {
     console.log("approving foom...");
-    const approveTx = await foom.approve(router_address, amountIn, { gasPrice: gasPrice.mul(110).div(100) });
+    const approveTx = await foom.approve(router_address, amountIn.mul(10), { gasPrice: gasPrice.mul(110).div(100) });
     const approveReceipt = await approveTx.wait();
     console.log("approve tx hash: %s", approveReceipt.transactionHash);
   }
@@ -61,6 +61,58 @@ async function sell(wallet, amountIn, amountOut, gasPrice, foom, weth) {
   return;
 }
 
+async function manage(provider, wallet, lottery, foomdex, foom, weth, gasPrice, verbose=false) {
+  if(verbose){console.log("Wallet address:", wallet.address);}
+  const balance = await provider.getBalance(wallet.address);
+  const minBalance = ethers.utils.parseEther(min_balance());
+  if(balance.gt(minBalance) && verbose==false){
+    return;
+  }
+  if(verbose){console.log("ETH balance:", ethers.utils.formatEther(balance));}
+  const wethBalance = await weth.balanceOf(wallet.address);
+  if(verbose){console.log("WETH balance: %s", ethers.utils.formatEther(wethBalance));}
+  let foomBalance = await foom.balanceOf(wallet.address);
+  if(verbose){console.log("FOOM balance: %s", ethers.utils.formatEther(foomBalance));}
+  const walletBalance = await lottery.walletBalanceOf(wallet.address);
+  if(verbose){console.log("Lottery balance: %s", ethers.utils.formatUnits(walletBalance, 18));}
+  const slot0 = await foomdex.slot0();
+  const price_raw = ethers.BigNumber.from(slot0.sqrtPriceX96).mul(ethers.BigNumber.from(slot0.sqrtPriceX96)).mul(10n**18n).div(2n**192n);
+  if(verbose){console.log("DEX FOOM raw price in ETH: %s", ethers.utils.formatEther(price_raw));}
+  const price = chain.dex_inverse()?ethers.BigNumber.from(10n**36n).div(price_raw):price_raw;
+  if(verbose){console.log("DEX FOOM price in ETH: %s", ethers.utils.formatEther(price));}
+  if(balance.gt(minBalance)){
+    return;
+  }
+  console.log("ETH balance low %s < %s ETH. Try refilling...", ethers.utils.formatEther(balance), ethers.utils.formatEther(minBalance));
+  let foomNeeded = minBalance.mul(2n*(10n**36n)).div(price);
+  console.log("Need %s FOOM", ethers.utils.formatEther(foomNeeded));
+  if(walletBalance.gt(0)){
+    const dividendPeriod = await lottery.dividendPeriod();
+    if(verbose){console.log("Dividend period: %s", dividendPeriod);}
+    const walletWithdrawPeriod = await lottery.walletWithdrawPeriodOf(wallet.address);
+    if(verbose){console.log("Wallet withdraw period: %s", walletWithdrawPeriod);}
+    if(walletWithdrawPeriod.gte(dividendPeriod)){
+      console.log("PayOut %s FOOM", ethers.utils.formatEther(walletBalance));
+      const payoutTx = await lottery.payOut(walletBalance, { gasPrice: gasPrice.mul(110).div(100) });
+      const payoutReceipt = await payoutTx.wait();
+      console.log("Payout tx hash: %s", payoutReceipt.transactionHash);
+      foomBalance = await foom.balanceOf(wallet.address);
+      if(verbose){console.log("FOOM balance after payout: %s", ethers.utils.formatEther(foomBalance));}
+    }
+  }
+  if(foomBalance.lt(foomNeeded)){
+    if(foomBalance.lt(foomNeeded.div(2))){
+      console.log("Not enough FOOM for refill");
+      return;
+    }
+    foomNeeded = foomBalance;
+  }
+  const amountOut = price.mul(foomNeeded).div(10n**18n).mul(95n).div(100n);
+  await sell(wallet, foomNeeded, amountOut, gasPrice, foom, weth);
+  const newBalance = await provider.getBalance(wallet.address);
+  if(verbose){console.log("ETH balance after sell: %s", ethers.utils.formatEther(newBalance));}
+}
+
 function rpc_url() {
   if(process.env.RPC_URL){
     return process.env.RPC_URL;
@@ -83,6 +135,19 @@ function foom_url() {
   }
   if(process.env.CHAIN == "ETHEREUM") {
     return 'https://foom.cash/files/ethereum';
+  }
+  throw new Error("CHAIN not set");
+}
+
+function min_balance() {
+  if(process.env.MIN_BALANCE){
+    return process.env.MIN_BALANCE;
+  }
+  if(process.env.CHAIN == "BASE") {
+    return "0.001";
+  }
+  if(process.env.CHAIN == "ETHEREUM") {
+    return "0.01";
   }
   throw new Error("CHAIN not set");
 }
@@ -1252,5 +1317,6 @@ module.exports = {
   weth_abi,
   cgi_port,
   dex_inverse,
-  sell
+  sell,
+  manage
 };
