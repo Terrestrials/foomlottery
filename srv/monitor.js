@@ -142,7 +142,7 @@ async function reveal(provider,lottery,index,commitIndex,commitHash,commitBlockH
   }
 }
 
-async function readLogs(provider,lottery,generator,walletAddress) {
+async function readLogs(provider,lottery,generator,wallet,foomdex,foom,weth) {
   const CHUNK_SIZE = 99;
   let [lastIndex,lastBlockNumber,lastRoot,lastLeaf] = tree.readLast();
   let [logsBlockNumber,logsTransactionIndex] = tree.readLastLog();
@@ -201,13 +201,16 @@ async function readLogs(provider,lottery,generator,walletAddress) {
           tree.writeRand(lastIndex,index,log.args.newRand);
           [lastIndex,lastBlockNumber,lastRoot,lastLeaf] = tree.readLast();
           console.log("lastIndex:", lastIndex);
+          // manage ETH balance
+          const gasPrice = await provider.getGasPrice();
+          await chain.manage(provider,wallet,lottery,foomdex,foom,weth,gasPrice,false);
         }
       }
       else if(log.event == "LogCommit") {
         console.log("LogCommit:", log.args);
         const index = Number(log.args.index);
         if(index == lastIndex) {
-          if(generator == walletAddress) {
+          if(generator == wallet.address) {
             await reveal(provider,lottery,index,Number(log.args.commitIndex),log.args.commitHash,log.blockHash,0n);
           }
         }
@@ -342,12 +345,15 @@ async function main() {
   });
   
   // run forever
+  const foomdex = new ethers.Contract(chain.dex_address(), chain.dex_abi(), wallet);
+  const foom = new ethers.Contract(chain.foom_address(), chain.foom_abi(), wallet);
+  const weth = new ethers.Contract(chain.weth_address(), chain.weth_abi(), wallet);
   while(true) {
     await rememberHash(provider,lottery);
-    generator = await readLogs(provider,lottery,generator,wallet.address);
+    generator = await readLogs(provider,lottery,generator,wallet,foomdex,foom,weth);
     if(task == "commit" && generator == wallet.address) { // TODO, update generator if needed
       await commit(provider,lottery);
-      generator = await readLogs(provider,lottery,generator,wallet.address);
+      generator = await readLogs(provider,lottery,generator,wallet,foomdex,foom,weth);
     }
     // wait 17 seconds
     console.log("Waiting 5 seconds");

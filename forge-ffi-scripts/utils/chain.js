@@ -78,22 +78,22 @@ async function manage(provider, wallet, lottery, foomdex, foom, weth, gasPrice, 
   const slot0 = await foomdex.slot0();
   const price_raw = ethers.BigNumber.from(slot0.sqrtPriceX96).mul(ethers.BigNumber.from(slot0.sqrtPriceX96)).mul(10n**18n).div(2n**192n);
   if(verbose){console.log("DEX FOOM raw price in ETH: %s", ethers.utils.formatEther(price_raw));}
-  const price = chain.dex_inverse()?ethers.BigNumber.from(10n**36n).div(price_raw):price_raw;
+  const price = dex_inverse()?ethers.BigNumber.from(10n**36n).div(price_raw):price_raw;
   if(verbose){console.log("DEX FOOM price in ETH: %s", ethers.utils.formatEther(price));}
   if(balance.gt(minBalance)){
     return;
   }
   console.log("ETH balance low %s < %s ETH. Try refilling...", ethers.utils.formatEther(balance), ethers.utils.formatEther(minBalance));
-  let foomNeeded = minBalance.mul(2n*(10n**36n)).div(price);
+  let foomNeeded = minBalance.mul(2n*(10n**18n)).div(price);
   console.log("Need %s FOOM", ethers.utils.formatEther(foomNeeded));
-  if(walletBalance.gt(0)){
+  if(walletBalance.gt(1n)){
     const dividendPeriod = await lottery.dividendPeriod();
     if(verbose){console.log("Dividend period: %s", dividendPeriod);}
     const walletWithdrawPeriod = await lottery.walletWithdrawPeriodOf(wallet.address);
     if(verbose){console.log("Wallet withdraw period: %s", walletWithdrawPeriod);}
-    if(walletWithdrawPeriod.gte(dividendPeriod)){
+    if(walletWithdrawPeriod.lte(dividendPeriod)){
       console.log("PayOut %s FOOM", ethers.utils.formatEther(walletBalance));
-      const payoutTx = await lottery.payOut(walletBalance, { gasPrice: gasPrice.mul(110).div(100) });
+      const payoutTx = await lottery.payOut(walletBalance.sub(1n), { gasPrice: gasPrice.mul(110).div(100) });
       const payoutReceipt = await payoutTx.wait();
       console.log("Payout tx hash: %s", payoutReceipt.transactionHash);
       foomBalance = await foom.balanceOf(wallet.address);
