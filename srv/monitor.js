@@ -82,7 +82,8 @@ async function commit(provider,lottery) {
       const revealSecretHash = ethers.utils.keccak256(revealSecret);
       console.log(revealSecretHash,"reveal secret hash");
       const gasPrice = await provider.getGasPrice();
-      const tx = await lottery.commit(revealSecretHash,maxUpdate, { gasPrice: gasPrice.mul(110).div(100) });
+      console.log("Commit gasPrice:", gasPrice);
+      const tx = await lottery.commit(revealSecretHash,maxUpdate, { gasPrice: gasPrice.mul(130).div(100) });
       console.log("Commit transaction:", tx);
       const receipt = await tx.wait();
       console.log("Commit transaction receipt:", receipt);
