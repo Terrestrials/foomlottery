@@ -28,6 +28,7 @@ async function rememberHash(provider,lottery) {
       console.log("Remember hash transaction receipt:", receipt);
     } catch(error) {
       console.log("Remember hash transaction failed:", error);
+      process.exit(1);
     }
   }
   /*if(commitIndex > 0n && commitBlockHash == _open) {
@@ -39,6 +40,7 @@ async function rememberHash(provider,lottery) {
       console.log("Remember hash transaction receipt:", receipt);
     } catch(error) {
       console.log("Remember hash transaction failed:", error);
+      process.exit(1);
     }
   }*/
   while(period > Number(process.env.LAST_PERIOD)+1) {
@@ -98,6 +100,7 @@ async function commit(provider,lottery) {
         console.log("Commit transaction receipt:", receipt);
       } catch(error) {
         console.log("Commit transaction failed:", error);
+        process.exit(1);
       }
     }
   }
@@ -155,9 +158,9 @@ async function reveal(provider,lottery,index,commitIndex,commitHash,commitBlockH
             console.log("Secret transaction receipt:", receipt);
           } catch(error) {
             console.log("Secret transaction failed:", error);
-            //throw new Error("Secret transaction failed");
           }
         }
+        process.exit(1);
       }
     } else {
       console.log("Reveal secret hash does not match commit hash");
