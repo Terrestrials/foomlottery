@@ -171,7 +171,8 @@ async function main() {
     const answer3 = await question(ask3);
     if(answer3.toLowerCase() == 'y') {
       console.log("CONNECT: %s", `${process.env.FOOM_URL}/cgi?`);
-      const res = await fetch(`${process.env.FOOM_URL}/cgi?receipt=${encoded}&invest=${invest_in_FOOM}`);
+      const invest_txt = ethers.utils.formatUnits(invest_in_FOOM, 18);
+      const res = await fetch(`${process.env.FOOM_URL}/cgi?receipt=${encoded}&invest=${invest_txt}`);
       const data = await res.text();
       console.log("RESPONSE: %s", data);
       return;
