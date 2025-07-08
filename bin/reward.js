@@ -2,7 +2,7 @@
 const dotenv = require("dotenv");
 const { ethers } = require("ethers");
 const fs = require("fs");
-const { hexToBigint, leBigintToBuffer, leBufferToBigint } = require("./utils/bigint.js");
+const { hexToBigint, leBigintToBuffer, leBufferToBigint, bigintToHex } = require("./utils/bigint.js");
 const { pedersenHash } = require("./utils/pedersen.js");
 const { findBet, readSecretPowerIndex } = require("./utils/mimcMerkleTree.js");
 const circomlibjs = require("circomlibjs");
@@ -42,9 +42,9 @@ async function main() {
     const mimcsponge = await circomlibjs.buildMimcSponge();
     const hash = await pedersenHash(leBigintToBuffer(secret, 31));
     const hash_power1 = hash + power + 1n;
+    //console.log("hash: %s", bigintToHex(hash_power1));
     const [betIndex,betRand,nextIndex] = findBet(hash_power1,index);
     if(betIndex>0 && betRand==0n){
-      //console.log("hash: %s", bigintToHex(hash_power1));
       console.log(ticket+" bet not processed yet, now at "+betIndex.toString(10));
       continue;
     }

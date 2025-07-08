@@ -25,7 +25,7 @@ async function main() {
   console.log("FOOM Lottery total number of tickets: %d", nextIndex);
 
   const lines = getLines('period.csv');
-  for (let i = 0;i<10; i++) {
+  for (let i = 0;i<10 && i<lines.length; i++) {
     //const period = await lottery.periods(i);
     //const bets = ethers.utils.formatUnits(period.bets.toString(), 18).replace(/\..*$/, "");
     //const shares = ethers.utils.formatUnits(period.shares.toString(), 18).replace(/\..*$/, "");
@@ -36,8 +36,10 @@ async function main() {
     const bets = parseInt(ethers.utils.formatUnits('0x'+bets_hex, 18).replace(/\..*$/, "")/1000000);
     const shares = parseInt(ethers.utils.formatUnits('0x'+shares_hex, 18).replace(/\..*$/, "")/1000000);
     if(bets<shares) {
-      const apy = (1.0+0.04*bets/shares)**((60*60*24*365)/(16384*2))-1;
-      console.log("Period %s: %s M volume, %s M shares, %s APY", period_num, bets, shares, sprintfjs.sprintf("%.2f", apy*100));
+      //const apy = (1.0+0.04*bets/shares)**((60*60*24*365)/(16384*2))-1;
+      const apy = (1.0+0.04*bets/shares)**((chain.blocks_per_minute()*60*24*365)/(16384))-1;
+      const apr = (0.04*bets/shares)*((chain.blocks_per_minute()*60*24*365)/(16384));
+      console.log("Period %s: %s M volume, %s M shares, %s%% APY (%s%% APR)", period_num, bets, shares, sprintfjs.sprintf("%.2f", apy*100),sprintfjs.sprintf("%.2f", apr*100));
     }
     else {
       console.log("Period %s: %s M volume, %s M shares", period_num, bets, shares);
