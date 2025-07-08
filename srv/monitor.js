@@ -16,33 +16,23 @@ async function rememberHash(provider,lottery) {
   const blockNumber = await provider.getBlockNumber();
   const D = await lottery.D();
   const commitBlock = D.commitBlock;
-  //const commitIndex = D.commitIndex;
+  const commitIndex = D.commitIndex;
   const commitBlockHash = D.commitBlockHash;
   const period = D.dividendPeriod;
   if(commitBlock > 0 && commitBlockHash == _open && blockNumber > commitBlock+30) {
     const gasPrice = await provider.getGasPrice();
     const tx = await lottery.rememberHash({ gasPrice: gasPrice.mul(130).div(100) });
     console.log("Remember hash transaction:", tx);
-    try {
-      const receipt = await tx.wait(1,60000);
-      console.log("Remember hash transaction receipt:", receipt);
-    } catch(error) {
-      console.log("Remember hash transaction failed:", error);
-      process.exit(1);
-    }
+    const receipt = await tx.wait();
+    console.log("Remember hash transaction receipt:", receipt);
   }
-  /*if(commitIndex > 0n && commitBlockHash == _open) {
+  if(commitIndex > 0n && commitBlockHash == _open) {
     const gasPrice = await provider.getGasPrice();
     const tx = await lottery.rememberHash({ gasPrice: gasPrice.mul(130).div(100) });
     console.log("Remember hash transaction:", tx);
-    try {
-      const receipt = await tx.wait(1,60000);
-      console.log("Remember hash transaction receipt:", receipt);
-    } catch(error) {
-      console.log("Remember hash transaction failed:", error);
-      process.exit(1);
-    }
-  }*/
+    const receipt = await tx.wait();
+    console.log("Remember hash transaction receipt:", receipt);
+  }
   while(period > Number(process.env.LAST_PERIOD)+1) {
     process.env.LAST_PERIOD ++;
     const Period = await lottery.periods(process.env.LAST_PERIOD);
@@ -92,16 +82,10 @@ async function commit(provider,lottery) {
       const revealSecretHash = ethers.utils.keccak256(revealSecret);
       console.log(revealSecretHash,"reveal secret hash");
       const gasPrice = await provider.getGasPrice();
-      console.log("Commit gasPrice:", ethers.utils.formatUnits(gasPrice, 9));
-      const tx = await lottery.commit(revealSecretHash,maxUpdate, { gasPrice: gasPrice.mul(130).div(100) });
+      const tx = await lottery.commit(revealSecretHash,maxUpdate, { gasPrice: gasPrice.mul(110).div(100) });
       console.log("Commit transaction:", tx);
-      try {
-        const receipt = await tx.wait(1,60000);
-        console.log("Commit transaction receipt:", receipt);
-      } catch(error) {
-        console.log("Commit transaction failed:", error);
-        process.exit(1);
-      }
+      const receipt = await tx.wait();
+      console.log("Commit transaction receipt:", receipt);
     }
   }
 }
@@ -135,16 +119,11 @@ async function reveal(provider,lottery,index,commitIndex,commitHash,commitBlockH
         const output = await tree.update(commitIndex,0,newRandUint128);
         const gasPrice = await provider.getGasPrice();
         const tx = await lottery.reveal(revealSecret,output.pA,output.pB,output.pC,output.newRoot, { gasPrice: gasPrice.mul(130).div(100) });
-        try {
-          const receipt = await tx.wait(1,60000);
-          console.log("Reveal transaction receipt:", receipt);
-          if(receipt.status == 1) {
+        const receipt = await tx.wait();
+        console.log("Reveal transaction receipt:", receipt);
+        if(receipt.status == 1) {
             tree.writeRevealLock(0);
-          } else {
-            throw new Error("Reveal transaction failed");
-          }
-        } catch(error) {
-          console.log("Reveal transaction failed:", error);
+        } else {
           throw new Error("Reveal transaction failed");
         }
       } catch(error) {
@@ -153,14 +132,9 @@ async function reveal(provider,lottery,index,commitIndex,commitHash,commitBlockH
           // publish secret to the network
           const gasPrice = await provider.getGasPrice();
           const tx = await lottery.secret(revealSecret, { gasPrice: gasPrice.mul(110).div(100) });
-          try {
-            const receipt = await tx.wait(1,60000);
-            console.log("Secret transaction receipt:", receipt);
-          } catch(error) {
-            console.log("Secret transaction failed:", error);
-          }
+          const receipt = await tx.wait();
+          console.log("Publish secret transaction receipt:", receipt);
         }
-        process.exit(1);
       }
     } else {
       console.log("Reveal secret hash does not match commit hash");
@@ -223,7 +197,13 @@ async function readLogs(provider,lottery,generator,wallet,foomdex,foom,weth) {
         if(index > lastIndex) {
           // print index and blockNumber in hex format
           console.log("Put leaves:", index.toString(16), log.args.newRand.toHexString(), log.args.newRoot.toHexString(), log.blockNumber.toString(16));
-          await tree.putLeaves(index,BigInt(log.args.newRand),BigInt(log.args.newRoot),log.blockNumber);
+          try {
+            await tree.putLeaves(index,BigInt(log.args.newRand),BigInt(log.args.newRoot),log.blockNumber);
+          } catch(error) {
+            console.error("Put leaves error:",error);
+            tree.writeLastLog(lastBlockNumber,-1);
+            return generator;
+          }
           tree.writeRand(lastIndex,index,log.args.newRand);
           [lastIndex,lastBlockNumber,lastRoot,lastLeaf] = tree.readLast();
           console.log("lastIndex:", lastIndex);
@@ -239,6 +219,11 @@ async function readLogs(provider,lottery,generator,wallet,foomdex,foom,weth) {
           if(generator == wallet.address) {
             await reveal(provider,lottery,index,Number(log.args.commitIndex),log.args.commitHash,log.blockHash,0n);
           }
+        }
+	else if (index >= lastIndex) {
+          console.log("Commit missing:", index, lastIndex);
+          tree.writeLastLog(lastBlockNumber,-1);
+          return generator;
         }
       }
       else if(log.event == "LogSecret") {
