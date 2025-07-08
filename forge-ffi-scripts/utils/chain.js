@@ -176,6 +176,16 @@ function wait_blocks() {
   throw new Error("CHAIN not set");
 }
 
+function blocks_per_minute() {
+  if(process.env.CHAIN == "BASE") {
+    return 30;
+  }
+  if(process.env.CHAIN == "ETHEREUM") {
+    return 5;
+  }
+  throw new Error("CHAIN not set");
+}
+
 function log_start() {
   if(process.env.CHAIN == "BASE") {
     return 30899833;
@@ -1319,5 +1329,6 @@ module.exports = {
   cgi_port,
   dex_inverse,
   sell,
-  manage
+  manage,
+  blocks_per_minute
 };
