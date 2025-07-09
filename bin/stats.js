@@ -58,7 +58,7 @@ async function main() {
   // convert minutesLeft to hours and minutes
   const hours = Math.floor(minutesLeft / 60);
   const minutes = minutesLeft % 60;
-  console.log("Next period in %d blocks (%d:%02d h)", blocksLeft, hours, minutes);
+  console.log(sprintfjs.sprintf("Next period in %d blocks (%d:%02d h)", blocksLeft, hours, minutes));
 }
 
 main()
