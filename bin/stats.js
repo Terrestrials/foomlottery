@@ -55,7 +55,10 @@ async function main() {
   //console.log("Period end block: %d", periodEndBlock);
   const blocksLeft = periodEndBlock - currentBlock;
   const minutesLeft = blocksLeft / chain.blocks_per_minute();
-  console.log("Next period in %d blocks (%d minutes)", blocksLeft, minutesLeft.toFixed(0));
+  // convert minutesLeft to hours and minutes
+  const hours = Math.floor(minutesLeft / 60);
+  const minutes = minutesLeft % 60;
+  console.log("Next period in %d blocks (%d:%02d h)", blocksLeft, hours, minutes);
 }
 
 main()
