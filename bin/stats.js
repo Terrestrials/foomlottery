@@ -45,6 +45,17 @@ async function main() {
       console.log("Period %s: %s M volume, %s M shares", period_num, bets, shares);
     }
   }
+  // read current block number
+  const currentBlock = await provider.getBlockNumber();
+  //console.log("Current block number: %d", currentBlock);
+  const D = await lottery.D();
+  //console.log("Period start block: %d", D.periodStartBlock);
+  const periodStartBlock = D.periodStartBlock;
+  const periodEndBlock = parseInt(periodStartBlock) + 16384;
+  //console.log("Period end block: %d", periodEndBlock);
+  const blocksLeft = periodEndBlock - currentBlock;
+  const minutesLeft = blocksLeft / chain.blocks_per_minute();
+  console.log("Next period in %d blocks (%d minutes)", blocksLeft, minutesLeft.toFixed(0));
 }
 
 main()
