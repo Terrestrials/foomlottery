@@ -17,9 +17,9 @@ async function rememberHash(provider,lottery) {
   const D = await lottery.D();
   const commitBlock = D.commitBlock;
   //const commitIndex = D.commitIndex;
-  const commitBlockHash = lottery.commitBlockHash();
+  const commitBlockHash = await lottery.commitBlockHash();
   const period = D.dividendPeriod;
-  if(commitBlock.gt(0) && commitBlockHash == _open &&  commitBlock.lt(blockNumber-30)) {
+  if(commitBlock.gt(0) && commitBlockHash.eq(_open) &&  commitBlock.lt(blockNumber-30)) {
     if(commitBlock.lt(blockNumber-256)) {
       console.log("Commit failed:", commitBlock, blockNumber);
       return;
