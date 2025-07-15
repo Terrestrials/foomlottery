@@ -16,23 +16,28 @@ async function rememberHash(provider,lottery) {
   const blockNumber = await provider.getBlockNumber();
   const D = await lottery.D();
   const commitBlock = D.commitBlock;
-  const commitIndex = D.commitIndex;
+  //const commitIndex = D.commitIndex;
   const commitBlockHash = D.commitBlockHash;
   const period = D.dividendPeriod;
   if(commitBlock > 0 && commitBlockHash == _open && blockNumber > commitBlock+30) {
     const gasPrice = await provider.getGasPrice();
     const tx = await lottery.rememberHash({ gasPrice: gasPrice.mul(130).div(100) });
     console.log("Remember hash transaction:", tx);
-    const receipt = await tx.wait();
-    console.log("Remember hash transaction receipt:", receipt);
+    try {
+      const receipt = await tx.wait(1,60000);
+      console.log("Remember hash transaction receipt:", receipt);
+    } catch(error) {
+      console.log("Remember hash transaction failed:", error);
+      process.exit(1);
+    }
   }
-  if(commitIndex > 0n && commitBlockHash == _open) {
+  /*if(commitIndex > 0n && commitBlockHash == _open) {
     const gasPrice = await provider.getGasPrice();
     const tx = await lottery.rememberHash({ gasPrice: gasPrice.mul(130).div(100) });
     console.log("Remember hash transaction:", tx);
     const receipt = await tx.wait();
     console.log("Remember hash transaction receipt:", receipt);
-  }
+  }*/
   while(period > Number(process.env.LAST_PERIOD)+1) {
     process.env.LAST_PERIOD ++;
     const Period = await lottery.periods(process.env.LAST_PERIOD);
@@ -82,10 +87,16 @@ async function commit(provider,lottery) {
       const revealSecretHash = ethers.utils.keccak256(revealSecret);
       console.log(revealSecretHash,"reveal secret hash");
       const gasPrice = await provider.getGasPrice();
-      const tx = await lottery.commit(revealSecretHash,maxUpdate, { gasPrice: gasPrice.mul(110).div(100) });
+      console.log("Commit gasPrice:", ethers.utils.formatUnits(gasPrice, 9));
+      const tx = await lottery.commit(revealSecretHash,maxUpdate, { gasPrice: gasPrice.mul(130).div(100) });
       console.log("Commit transaction:", tx);
-      const receipt = await tx.wait();
-      console.log("Commit transaction receipt:", receipt);
+      try {
+        const receipt = await tx.wait(1,60000);
+        console.log("Commit transaction receipt:", receipt);
+      } catch(error) {
+        console.log("Commit transaction failed:", error);
+        process.exit(1);
+      }
     }
   }
 }
@@ -119,11 +130,15 @@ async function reveal(provider,lottery,index,commitIndex,commitHash,commitBlockH
         const output = await tree.update(commitIndex,0,newRandUint128);
         const gasPrice = await provider.getGasPrice();
         const tx = await lottery.reveal(revealSecret,output.pA,output.pB,output.pC,output.newRoot, { gasPrice: gasPrice.mul(130).div(100) });
-        const receipt = await tx.wait();
-        console.log("Reveal transaction receipt:", receipt);
-        if(receipt.status == 1) {
+        try {
+          const receipt = await tx.wait(1,60000);
+          console.log("Reveal transaction receipt:", receipt);
+          if(receipt.status == 1) {
             tree.writeRevealLock(0);
-        } else {
+          } else {
+            throw new Error("Reveal transaction failed");
+          }
+        } catch(error) {
           throw new Error("Reveal transaction failed");
         }
       } catch(error) {
@@ -132,9 +147,14 @@ async function reveal(provider,lottery,index,commitIndex,commitHash,commitBlockH
           // publish secret to the network
           const gasPrice = await provider.getGasPrice();
           const tx = await lottery.secret(revealSecret, { gasPrice: gasPrice.mul(110).div(100) });
-          const receipt = await tx.wait();
-          console.log("Publish secret transaction receipt:", receipt);
+          try {
+            const receipt = await tx.wait(1,60000);
+            console.log("Secret transaction receipt:", receipt);
+          } catch(error) {
+            console.log("Secret transaction failed:", error);
+          }
         }
+        process.exit(1);
       }
     } else {
       console.log("Reveal secret hash does not match commit hash");
