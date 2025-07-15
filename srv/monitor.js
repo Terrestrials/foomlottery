@@ -84,7 +84,7 @@ async function rememberHash(provider,lottery) {
   }
   const minBets = process.env.MIN_BETS ? parseInt(process.env.MIN_BETS) : 179;
   const betsIndex = D.betsIndex;
-  if(betsIndex > minBets + 10 && process.env.BETS_INDEX == "0") {
+  if(betsIndex > minBets + 5 && process.env.BETS_INDEX == "0") {
     process.env.BETS_INDEX = betsIndex.toString();
     await sendTelegramMessage("betsIndex: "+betsIndex.toString());
   }
