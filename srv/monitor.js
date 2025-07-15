@@ -82,9 +82,9 @@ async function rememberHash(provider,lottery) {
       process.exit(1);
     }
   }
-  const minBets = process.env.MIN_BETS ? parseInt(process.env.MIN_BETS) : 200;
+  const minBets = process.env.MIN_BETS ? parseInt(process.env.MIN_BETS) : 179;
   const betsIndex = D.betsIndex;
-  if(betsIndex > minBets && process.env.BETS_INDEX == "0") {
+  if(betsIndex > minBets + 10 && process.env.BETS_INDEX == "0") {
     process.env.BETS_INDEX = betsIndex.toString();
     await sendTelegramMessage("betsIndex: "+betsIndex.toString());
   }
