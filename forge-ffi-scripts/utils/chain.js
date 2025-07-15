@@ -166,6 +166,13 @@ function gas_price_limit() {
   throw new Error("CHAIN not set");
 }
 
+function gas_cost_limit() { // in promille (1/1000)
+  if(process.env.GAS_COST_LIMIT){
+    return process.env.GAS_COST_LIMIT;
+  }
+  return "5"; // accept gas cost of 0.5% of bet value
+}
+
 function wait_blocks() {
   if(process.env.CHAIN == "BASE") {
     return 5;
@@ -1330,5 +1337,6 @@ module.exports = {
   dex_inverse,
   sell,
   manage,
-  blocks_per_minute
+  blocks_per_minute,
+  gas_cost_limit
 };

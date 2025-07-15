@@ -52,6 +52,7 @@ async function main() {
   const provider = new ethers.providers.JsonRpcProvider(chain.rpc_url());
   const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
   const lottery = new ethers.Contract(chain.lottery_address(), chain.lottery_abi(), wallet);
+  const foomdex = new ethers.Contract(chain.dex_address(), chain.dex_abi(), wallet);
 
   const gasPrice = await provider.getGasPrice();
   console.log("GAS price: %s", ethers.utils.formatUnits(gasPrice, 9));
@@ -73,14 +74,27 @@ async function main() {
   const powerBN = ethers.BigNumber.from(power);
   const twoBN = ethers.BigNumber.from(2);
   const foom_needed = betMin.mul(twoBN.add(twoBN.pow(powerBN)));
-  console.log("FOOM  needed: %s", ethers.utils.formatUnits(foom_needed, 18));
+  const slot0 = await foomdex.slot0();
+  const price_raw = ethers.BigNumber.from(slot0.sqrtPriceX96).mul(ethers.BigNumber.from(slot0.sqrtPriceX96)).mul(10n**18n).div(2n**192n);
+  //console.log("DEX FOOM raw price in ETH: %s", ethers.utils.formatEther(price_raw));
+  const price = chain.dex_inverse()?ethers.BigNumber.from(10n**36n).div(price_raw):price_raw;
+  //console.log("DEX FOOM price in ETH: %s", ethers.utils.formatEther(price));
+  const amountInETH = price.mul(foom_needed).div(10n**18n);
+  console.log("FOOM  needed: %s (%s ETH)", ethers.utils.formatUnits(foom_needed, 18), ethers.utils.formatEther(amountInETH));  
+  if((gasPrice.mul(70000)).gt(amountInETH.mul(chain.gas_cost_limit()).div(1000))) {
+    console.log("Expected gas cost (%s) must be lower than FOOM ETH value * %s/1000 = %s",
+      ethers.utils.formatUnits(gasPrice.mul(70000), 18),
+      chain.gas_cost_limit(),
+      ethers.utils.formatUnits(amountInETH.mul(chain.gas_cost_limit()).div(1000), 18));
+    process.exit(1);
+  }
 
   if(foomBalance.lt(foom_needed)) {
     console.log("Not enough FOOM for this ticket power. You need %s FOOM. You have %s FOOM. The transaction from this account will fail.",
       (ethers.utils.formatUnits(foom_needed, 18)),
       (ethers.utils.formatEther(foomBalance)));
     //rl.close();
-    //process.exit(0);
+    //process.exit(1);
   }
   let hash = 0n;
   let i = 0n;
@@ -150,7 +164,7 @@ async function main() {
   const allowance = await foom.allowance(wallet.address, lottery.address);
   if(allowance.lt(foom_needed)) {
     console.log("approving foom...");
-    const approveTx = await foom.approve(lottery.address, foom_needed, { gasPrice: gasPrice.mul(110).div(100) });
+    const approveTx = await foom.approve(lottery.address, foom_needed.mul(10), { gasPrice: gasPrice.mul(110).div(100) });
     const approveReceipt = await approveTx.wait();
     console.log("approve tx hash: %s", approveReceipt.transactionHash);
   }

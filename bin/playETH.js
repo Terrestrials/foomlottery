@@ -91,7 +91,14 @@ async function main() {
   //console.log("DEX amountInETH: %s (200%%)", ethers.utils.formatEther(amountInETH));
   const amountInETH = price.mul(foom_needed).div(10n**18n).mul(105n).div(100n);
   console.log("DEX amountInETH: %s (105%%)", ethers.utils.formatEther(amountInETH));
-  
+  if((gasPrice.mul(70000)).gt(amountInETH.mul(chain.gas_cost_limit()).div(1000))) {
+    console.log("Expected gas cost (%s) must be lower than amountInETH value * %s/1000 = %s",
+      ethers.utils.formatUnits(gasPrice.mul(70000), 18),
+      chain.gas_cost_limit(),
+      ethers.utils.formatUnits(amountInETH.mul(chain.gas_cost_limit()).div(1000), 18));
+    process.exit(1);
+  }
+
   if(balance.lt(amountInETH)) {
     console.log("Not enough ETH for this ticket power. You need %s ETH. You have %s ETH.The transaction from this account will fail.",
       (ethers.utils.formatEther(amountInETH)),
