@@ -19,7 +19,11 @@ async function rememberHash(provider,lottery) {
   //const commitIndex = D.commitIndex;
   const commitBlockHash = lottery.commitBlockHash();
   const period = D.dividendPeriod;
-  if(commitBlock > 0 && commitBlockHash == _open && blockNumber > commitBlock+30) {
+  if(commitBlock.gt(0) && commitBlockHash == _open &&  commitBlock.lt(blockNumber-30)) {
+    if(commitBlock.lt(blockNumber-256)) {
+      console.log("Commit failed:", commitBlock, blockNumber);
+      return;
+    }
     const gasPrice = await provider.getGasPrice();
     const tx = await lottery.rememberHash({ gasPrice: gasPrice.mul(130).div(100) });
     console.log("Remember hash transaction:", tx);
