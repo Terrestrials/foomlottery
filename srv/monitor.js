@@ -17,7 +17,7 @@ async function rememberHash(provider,lottery) {
   const D = await lottery.D();
   const commitBlock = D.commitBlock;
   //const commitIndex = D.commitIndex;
-  const commitBlockHash = D.commitBlockHash;
+  const commitBlockHash = lottery.commitBlockHash();
   const period = D.dividendPeriod;
   if(commitBlock > 0 && commitBlockHash == _open && blockNumber > commitBlock+30) {
     const gasPrice = await provider.getGasPrice();
