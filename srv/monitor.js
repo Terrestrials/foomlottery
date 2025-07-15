@@ -8,8 +8,50 @@ const { ethers } = require("ethers");
 //  update, putLeaves, readFees, getWaitingSum, writePrayer, writeRand, writeLastBet, readLastBet, readLastPeriod, appendLastPeriod } = require("./utils/mimcMerkleTree.js");
 const tree = require("./utils/mimcMerkleTree.js");
 const chain = require("./utils/chain.js");
-  
+const querystring = require('querystring');
+
 ////////////////////////////// MAIN ///////////////////////////////////////////
+
+async function sendTelegramMessage(message) {
+  const apiKey = process.env.TELEGRAM_API_KEY;
+  const chatId = process.env.TELEGRAM_CHAT_ID;
+  if(!apiKey || !chatId) {
+    return;
+  }
+  message = process.env.CHAIN+" "+process.env.HOSTNAME+" "+message;
+  const postData = querystring.stringify({
+    chat_id: chatId,
+    text: message,
+    parse_mode: 'HTML',
+  });
+  const url = `https://api.telegram.org/bot${apiKey}/sendMessage`;
+  
+  // Create AbortController for timeout
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+  
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Length': Buffer.byteLength(postData),
+      },
+      body: postData,
+      signal: controller.signal,
+    });
+    clearTimeout(timeoutId);
+    return response;
+  } catch (error) {
+    clearTimeout(timeoutId);
+    if (error.name === 'AbortError') {
+      console.log('Telegram message request timed out');
+    } else {
+      console.log('Telegram message request failed:', error.message);
+    }
+    return null;
+  }
+}
 
 async function rememberHash(provider,lottery) {
   const _open=1n;
@@ -22,6 +64,10 @@ async function rememberHash(provider,lottery) {
   if(commitBlock.gt(0) && commitBlockHash.eq(_open) &&  commitBlock.lt(blockNumber-30)) {
     if(commitBlock.lt(blockNumber-256)) {
       console.log("Commit failed:", commitBlock, blockNumber);
+      if(process.env.COMMIT_FAILED == "0") {
+        process.env.COMMIT_FAILED = "1";
+        await sendTelegramMessage("Commit failed: "+commitBlock.toString()+" "+blockNumber.toString());
+      }
       return;
     }
     const gasPrice = await provider.getGasPrice();
@@ -30,10 +76,20 @@ async function rememberHash(provider,lottery) {
     try {
       const receipt = await tx.wait(1,60000);
       console.log("Remember hash transaction receipt:", receipt);
+      await sendTelegramMessage("Remember hash transaction successful");
     } catch(error) {
       console.log("Remember hash transaction failed:", error);
       process.exit(1);
     }
+  }
+  const minBets = process.env.MIN_BETS ? parseInt(process.env.MIN_BETS) : 200;
+  const betsIndex = D.betsIndex;
+  if(betsIndex > minBets && process.env.BETS_INDEX == "0") {
+    process.env.BETS_INDEX = betsIndex.toString();
+    await sendTelegramMessage("betsIndex: "+betsIndex.toString());
+  }
+  if(betsIndex == 0) {
+    process.env.BETS_INDEX = "0";
   }
   /*if(commitIndex > 0n && commitBlockHash == _open) {
     const gasPrice = await provider.getGasPrice();
@@ -277,6 +333,8 @@ async function main() {
   dotenv.config();
   // remove FOOM_URL from process.env
   delete process.env.FOOM_URL;
+  process.env.BETS_INDEX = "0";
+  process.env.COMMIT_FAILED = "0";
   const inputs = process.argv.slice(2, process.argv.length);
   const task = inputs.length > 0 ? inputs[0] : "";
   const provider = new ethers.providers.JsonRpcProvider(chain.rpc_url());
@@ -382,7 +440,8 @@ async function main() {
   server.listen(chain.cgi_port(), '127.0.0.1', () => {
     console.log("Server started on port "+chain.cgi_port());
   });
-  
+  await sendTelegramMessage("Server started");
+
   // run forever
   while(true) {
     await rememberHash(provider,lottery);
