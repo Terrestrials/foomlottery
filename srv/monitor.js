@@ -81,6 +81,7 @@ async function rememberHash(provider,lottery) {
       await sendTelegramMessage("Remember hash transaction successful");
     } catch(error) {
       console.log("Remember hash transaction failed:", error);
+      await sendTelegramMessage("Remember hash transaction failed");
       process.exit(1);
     }
   }
@@ -104,7 +105,12 @@ async function rememberHash(provider,lottery) {
     process.env.LAST_PERIOD ++;
     const Period = await lottery.periods(process.env.LAST_PERIOD);
     tree.appendLastPeriod(process.env.LAST_PERIOD,Period.bets,Period.shares);
-    console.log("Saved period: %d, bets: %d, shares: %d", process.env.LAST_PERIOD,ethers.utils.formatUnits(Period.bets, 18),ethers.utils.formatUnits(Period.shares, 18));
+    // print bets and shares in millions
+    const periodTxt = "Saved period: "+process.env.LAST_PERIOD+
+      ", bets: "+ethers.utils.formatUnits(Period.bets, 18+6).replace(/\..*/, "")+" M FOOM"+
+      ", shares: "+ethers.utils.formatUnits(Period.shares, 18+6).replace(/\..*/, "")+" M FOOM";
+    console.log(periodTxt);
+    await sendTelegramMessage(periodTxt);
     tree.keepLastLines("prayers.csv",100);
     tree.keepLastLines("period.csv",10);
   }
@@ -157,6 +163,7 @@ async function commit(provider,lottery) {
         console.log("Commit transaction receipt:", receipt);
       } catch(error) {
         console.log("Commit transaction failed:", error);
+        await sendTelegramMessage("Commit transaction failed");
         process.exit(1);
       }
     }
@@ -181,8 +188,26 @@ async function reveal(provider,lottery,index,commitIndex,commitHash,commitBlockH
     console.log(revealSecretHash,"reveal secret hash");
     console.log(commitHash.toHexString(),"commitHash");
     if(commitHash.eq(revealSecretHash)) {
-      if(tree.readRevealLock()==index) {
+      if(tree.readRevealLock()== -index) {
         console.log("Reveal lock present");
+        await sendTelegramMessage("Reveal lock present");
+        return;
+      }
+      if(tree.readRevealLock()== index) {
+        if(!revealed) {
+          console.log("Reveal lock present without Secret");
+          const gasPrice = await provider.getGasPrice();
+          const tx = await lottery.secret(revealSecret, { gasPrice: gasPrice.mul(110).div(100) });
+          try {
+            const receipt = await tx.wait(1,60000);
+            console.log("Secret transaction receipt:", receipt);
+            tree.writeRevealLock(-index);
+            await sendTelegramMessage("Reveal lock present without Secret");
+          } catch(error) {
+            console.log("Secret transaction failed:", error);
+            await sendTelegramMessage("Secret transaction failed");
+          }
+        }
         return;
       }
       tree.writeRevealLock(index); 
@@ -212,14 +237,18 @@ async function reveal(provider,lottery,index,commitIndex,commitHash,commitBlockH
           try {
             const receipt = await tx.wait(1,60000);
             console.log("Secret transaction receipt:", receipt);
+            tree.writeRevealLock(-index);
           } catch(error) {
             console.log("Secret transaction failed:", error);
+            await sendTelegramMessage("Secret transaction failed");
           }
         }
+        await sendTelegramMessage("Reveal transaction failed");
         process.exit(1);
       }
     } else {
       console.log("Reveal secret hash does not match commit hash");
+      await sendTelegramMessage("Reveal secret hash does not match commit hash");
     }
   }
 }
@@ -255,7 +284,9 @@ async function readLogs(provider,lottery,generator,wallet,foomdex,foom,weth) {
         process.env.POWER = power; // remember power for logPrayer
         if(newBetIndex.gt(betIndex+1)) {
           tree.writeLastLog(betBlockNumber,-1);
-          console.log("Bet missing:", betIndex + 1, newBetIndex.toString());
+          const betMissingTxt = "Bet missing:"+(betIndex+1)+"<"+newBetIndex.toString();
+          console.log(betMissingTxt);
+          await sendTelegramMessage(betMissingTxt);
           return generator;
         } else if(newBetIndex.eq(betIndex+1)) {
           tree.writeWaiting(newBetIndex,log.args.newHash,log.blockNumber);
@@ -284,6 +315,7 @@ async function readLogs(provider,lottery,generator,wallet,foomdex,foom,weth) {
           } catch(error) {
             console.error("Put leaves error:",error);
             tree.writeLastLog(lastBlockNumber,-1);
+            await sendTelegramMessage("Put leaves error at "+index.toString(10));
             return generator;
           }
           tree.writeRand(lastIndex,index,log.args.newRand);
@@ -302,9 +334,10 @@ async function readLogs(provider,lottery,generator,wallet,foomdex,foom,weth) {
             await reveal(provider,lottery,index,Number(log.args.commitIndex),log.args.commitHash,log.blockHash,0n);
           }
         }
-	else if (index >= lastIndex) {
+        else if (index >= lastIndex) {
           console.log("Commit missing:", index, lastIndex);
           tree.writeLastLog(lastBlockNumber,-1);
+          await sendTelegramMessage("Commit missing at "+index.toString(10));
           return generator;
         }
       }
