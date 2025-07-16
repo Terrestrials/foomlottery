@@ -9,6 +9,7 @@ const { ethers } = require("ethers");
 const tree = require("./utils/mimcMerkleTree.js");
 const chain = require("./utils/chain.js");
 const querystring = require('querystring');
+const request = require('sync-request');
 
 ////////////////////////////// MAIN ///////////////////////////////////////////
 
@@ -31,7 +32,8 @@ async function sendTelegramMessage(message) {
   const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
   
   try {
-    const response = await fetch(url, {
+    // use request instead of fetch
+    const response = request('POST', url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -41,7 +43,7 @@ async function sendTelegramMessage(message) {
       signal: controller.signal,
     });
     clearTimeout(timeoutId);
-    return response;
+    return response.body;
   } catch (error) {
     clearTimeout(timeoutId);
     if (error.name === 'AbortError') {
