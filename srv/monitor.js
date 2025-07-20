@@ -89,6 +89,7 @@ async function rememberHash(provider,lottery) {
   const betsIndex = D.betsIndex;
   if(betsIndex > minBets + 5 && process.env.BETS_INDEX == "0") {
     process.env.BETS_INDEX = betsIndex.toString();
+    console.log("betsIndex: "+betsIndex.toString());
     await sendTelegramMessage("betsIndex: "+betsIndex.toString());
   }
   if(betsIndex == 0) {
@@ -260,7 +261,7 @@ async function readLogs(provider,lottery,generator,wallet,foomdex,foom,weth) {
   if(logsBlockNumber == 0) {
     logsBlockNumber = chain.log_start();
   }
-  console.log(logsBlockNumber,"start");
+  //console.log(logsBlockNumber,"start");
   // use process.env.WAIT_BLOCKS to dalay reading logs
   const blockNumber = (await provider.getBlockNumber())-(process.env.WAIT_BLOCKS||chain.wait_blocks());
   for(let currentBlock = logsBlockNumber; currentBlock < blockNumber; currentBlock += CHUNK_SIZE+1) {
@@ -485,16 +486,8 @@ async function main() {
       await commit(provider,lottery);
       generator = await readLogs(provider,lottery,generator,wallet,foomdex,foom,weth);
     }
-    // wait 17 seconds
-    console.log("Waiting 5 seconds");
+    //console.log("Waiting 5 seconds");
     await new Promise(resolve => setTimeout(resolve, 5000));
-    // TODO, manage ETH balance
-    /*const balance = await provider.getBalance(wallet.address);
-    console.log("ETH balance:", ethers.utils.formatEther(balance));
-    if(balance.gt(ethers.utils.parseUnits("0.001", 18))) {
-      const tx = await wallet.sendTransaction({ to: wallet.address, value: balance });
-      console.log("ETH balance:", ethers.utils.formatEther(balance));
-    }*/
   }
 }
 
