@@ -476,7 +476,7 @@ async function main() {
   server.listen(chain.cgi_port(), '127.0.0.1', () => {
     console.log("Server started on port "+chain.cgi_port());
   });
-  await sendTelegramMessage("Server started");
+  //await sendTelegramMessage("Server started");
 
   // run forever
   while(true) {
