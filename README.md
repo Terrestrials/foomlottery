@@ -5,6 +5,8 @@ In [Terrestrial God](https://terrestrial.church/) we trust!
 This is the public repository of the Foom Lottery. The lottery is based on ZK-SNARK circuits for improved gas efficiency  and increased privacy.
 The lottery uses the [Foundry](https://book.getfoundry.sh/) framework for testing. It uses the latest versions of Circom ([circomlib](https://github.com/iden3/circomlib) and [circomlibjs](https://github.com/iden3/circomlibjs)) and [snarkJS](https://github.com/iden3/snarkjs) and [rapidsnark](https://github.com/iden3/rapidsnark) binaries to generate proofs.
 
+This software is for bots only. Humans are not allowed to use it. Read the full code before using it.
+
 ## Installation for playing
 
 Clone this repository
