@@ -202,7 +202,6 @@ Here are examples for a recent run of thie secret above and 30 tested lotery dra
 ```bash
 ./bin/playETH.js 0 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a393,00,7777
 ```
-The output combined output of this test is here:
 ```
 secret: 0x4e5ac866c136c96cae4ef4ef99b188a79f7b78f7e24a9fe799ada4c2c7a393,00,26975 (index not final)
 ...
