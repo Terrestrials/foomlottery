@@ -315,7 +315,7 @@ async function readLogs(provider,lottery,generator,wallet,foomdex,foom,weth) {
             await tree.putLeaves(index,BigInt(log.args.newRand),BigInt(log.args.newRoot),log.blockNumber);
           } catch(error) {
             console.error("Put leaves error:",error);
-            tree.writeLastLog(lastBlockNumber,-1);
+            tree.writeLastLog(lastBlockNumber.toString(10),-1);
             await sendTelegramMessage("Put leaves error at "+index.toString(10));
             return generator;
           }
@@ -337,7 +337,7 @@ async function readLogs(provider,lottery,generator,wallet,foomdex,foom,weth) {
         }
         else if (index >= lastIndex) {
           console.log("Commit missing:", index, lastIndex);
-          tree.writeLastLog(lastBlockNumber,-1);
+          tree.writeLastLog(lastBlockNumber.toString(10),-1);
           await sendTelegramMessage("Commit missing at "+index.toString(10));
           return generator;
         }
