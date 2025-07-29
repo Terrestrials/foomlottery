@@ -223,6 +223,9 @@ async function reveal(provider,lottery,index,commitIndex,commitHash,commitBlockH
           console.log("Reveal transaction receipt:", receipt);
           if(receipt.status == 1) {
             tree.writeRevealLock(0);
+            if(revealed) {
+              await sendTelegramMessage("Reveal transaction successful with secret");
+            }
           } else {
             throw new Error("Reveal transaction failed");
           }
