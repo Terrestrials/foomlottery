@@ -52,10 +52,12 @@ function getLines(path) {
     if(process.env.FOOM_URL && process.env.FOOM_URL.startsWith("http")) {
       // check if path in cache
       if(process.env.CACHE && existsSync(process.env.CACHE+"/"+path+".gz")) {
+        //console.log("cache",path);
         fileold = openSync(process.env.CACHE+"/"+path+".gz", "r");
         textold = zlib.gunzipSync(readFileSync(fileold)).toString();
         closeSync(fileold);
       } else {
+        //console.log("www",path);
         const url = process.env.FOOM_URL + "/" + path + "?nocache=" + Date.now();
         const response = request('GET', url);
         if (response.statusCode !== 200) {
@@ -434,20 +436,24 @@ async function getPath(index,nextIndex){
     const [nleaves4] = getLeaves(""+npath1+"/"+npath2+"/"+npath3+".csv");
     tree4 = await mimicMerkleTree(hexToBigint(zeros[0]),nleaves4,8);}
   const root4 = tree4.root;
-  leaves3.push(root4);
+  if((index&0xFFFF0000)==(nextIndex&0xFFFF0000)){
+    leaves3.push(root4);}
   let tree3 = await mimicMerkleTree(hexToBigint(zeros[1]),leaves3,8);
   const mpath3 = tree3.path(path3i);
   if((index&0xFFFF0000)!=(nextIndex&0xFFFF0000)){
     const [nleaves3] = getLeaves(""+npath1+"/"+npath2+"/index.csv");
+    nleaves3.push(root4);
     tree3 = await mimicMerkleTree(hexToBigint(zeros[1]),nleaves3,8);}
   const root3 = tree3.root;
-  leaves2.push(root3);
+  if((index&0xFF000000)==(nextIndex&0xFF000000)){
+    leaves2.push(root3);}
   let tree2 = await mimicMerkleTree(hexToBigint(zeros[2]),leaves2,8);
   const mpath2 = tree2.path(path2i);
-  const root2 = tree2.root;
   if((index&0xFF000000)!=(nextIndex&0xFF000000)){
     const [nleaves2] = getLeaves(""+npath1+"/index.csv");
+    nleaves2.push(root3);
     tree2 = await mimicMerkleTree(hexToBigint(zeros[2]),nleaves2,8);}
+  const root2 = tree2.root;
   leaves1.push(root2);
   const tree1 = await mimicMerkleTree(hexToBigint(zeros[3]),leaves1,8);
   const newroot = tree1.root;
